@@ -11,10 +11,10 @@
     <header class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex items-center justify-between shadow-md">
         <div class="flex items-center space-x-3">
             <span class="text-xl font-black tracking-wider text-indigo-400">ANYCARD</span>
-            <span class="text-xs bg-indigo-900/50 text-indigo-300 border border-indigo-700/50 px-2.5 py-0.5 rounded-full font-mono">Workspace v1.0</span>
+            <span class="text-xs bg-indigo-900/50 text-indigo-300 border border-indigo-700/50 px-2.5 py-0.5 rounded-full font-mono">Workspace v1.1</span>
         </div>
         <div class="text-sm text-gray-400">
-            Target Host: <span class="font-mono text-green-400">anycard.ca</span>
+            Target Host: <span class="font-mono text-green-400">anycard.ca (New Tab Mode)</span>
         </div>
     </header>
 
@@ -37,88 +37,15 @@
                     <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Frame 2: Generated Queues</label>
                     <span id="queueCount" class="text-xs font-mono text-gray-500">0 items</span>
                 </div>
-                <div id="linksContainer" class="flex-grow overflow-y-auto space-y-2 pr-1 custom-scrollbar placeholder-container flex flex-col items-center justify-center text-gray-600 border border-dashed border-gray-700 rounded bg-gray-950/30">
+                <div id="linksContainer" class="flex-grow overflow-y-auto space-y-2 pr-1 flex flex-col items-center justify-center text-gray-600 border border-dashed border-gray-700 rounded bg-gray-950/30">
                     <p class="text-xs text-center px-4">Awaiting raw data generation...</p>
                 </div>
             </div>
 
         </div>
 
-        <div class="flex-grow bg-gray-950 flex flex-col relative">
-            <div class="bg-gray-900 border-b border-gray-800 px-4 py-2 flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Frame 3: Live Target Terminal</span>
-                <span id="activeUrlDisplay" class="text-xs font-mono text-gray-500 max-w-xl truncate">No active session loaded</span>
-            </div>
-            <iframe id="targetFrame" name="targetFrame" class="w-full h-full bg-white" src="about:blank" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts text/html"></iframe>
-        </div>
-
-    </div>
-
-    <script>
-        function generateLinks() {
-            const rawText = document.getElementById('rawData').value.trim();
-            const container = document.getElementById('linksContainer');
-            const queueCountDisplay = document.getElementById('queueCount');
-            
-            // Clean up container classes if resetting
-            container.innerHTML = '';
-            container.className = "flex-grow overflow-y-auto space-y-1.5 pr-1";
-
-            if (!rawText) {
-                container.className = "flex-grow overflow-y-auto flex flex-col items-center justify-center text-gray-600 border border-dashed border-gray-700 rounded bg-gray-950/30";
-                container.innerHTML = '<p class="text-xs text-center px-4">Awaiting raw data generation...</p>';
-                queueCountDisplay.innerText = '0 items';
-                return;
-            }
-
-            const lines = rawText.split('\n');
-            let generatedCount = 0;
-
-            lines.forEach((line, index) => {
-                const parts = line.trim().split(/\s+/); // Splitting by tabs or consecutive spaces
-                if (parts.length >= 2) {
-                    const code = parts[0];
-                    const pin = parts[1];
-                    generatedCount++;
-
-                    // Build standard target parameters based on your configuration 
-                    const targetUrl = `https://anycard.ca/swap/loadcard?code=${encodeURIComponent(code)}&pin=${encodeURIComponent(pin)}`;
-
-                    // Create action element wrapper
-                    const item = document.createElement('div');
-                    item.className = "group bg-gray-800 hover:bg-indigo-950/40 border border-gray-700 hover:border-indigo-500/50 p-2.5 rounded cursor-pointer transition-all flex items-center justify-between";
-                    
-                    // Assign automated trigger action to target live Frame 3
-                    item.onclick = function() {
-                        // Clear visual selections, then highlight current active queue item
-                        document.querySelectorAll('.group').forEach(el => el.classList.remove('border-indigo-500', 'bg-indigo-950/30'));
-                        item.classList.add('border-indigo-500', 'bg-indigo-950/30');
-                        
-                        // Execute frame update action
-                        document.getElementById('targetFrame').src = targetUrl;
-                        document.getElementById('activeUrlDisplay').innerText = targetUrl;
-                        document.getElementById('activeUrlDisplay').classList.remove('text-gray-500');
-                        document.getElementById('activeUrlDisplay').classList.add('text-indigo-400');
-                    };
-
-                    item.innerHTML = `
-                        <div class="flex flex-col space-y-0.5 pointer-events-none">
-                            <span class="text-xs font-mono font-bold text-gray-200 group-hover:text-indigo-300">Code: ${code}</span>
-                            <span class="text-[10px] font-mono text-gray-400">PIN: <span class="text-green-500">${pin}</span></span>
-                        </div>
-                        <div class="text-gray-500 group-hover:text-indigo-400 transition-colors pointer-events-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </div>
-                    `;
-                    container.appendChild(item);
-                }
-            });
-
-            queueCountDisplay.innerText = `${generatedCount} card(s) ready`;
-        }
-    </script>
-
-</body>
-</html>
+        <div class="flex-grow bg-gray-950 flex flex-col p-6 overflow-y-auto">
+            <div class="max-w-2xl">
+                <h3 class="text-lg font-bold text-gray-200 mb-2">Workspace Activity Tracker</h3>
+                <p class="text-sm text-gray-400 mb-6">
+                    Click
