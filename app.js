@@ -1,86 +1,114 @@
+const JS_VERSION = "JS v2.0 VERSION SYSTEM";
+
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 
 const BOOKMARKLET_CODE = `javascript:(async function(){try{var text=await navigator.clipboard.readText();var parts=text.trim().split(/\\s+/);if(parts.length<2)return;var cardInput=parts[0];var pinInput=parts[1];var cardField=document.querySelector('input[placeholder*="Card Number"]');var pinField=document.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField)return;cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event("input",{bubbles:true}));pinField.dispatchEvent(new Event("input",{bubbles:true}));setTimeout(function(){var btn=[...document.querySelectorAll("button,input[type='submit']")].find(function(el){return /submit card info/i.test(el.innerText||el.value||"")});if(btn)btn.click();},300);}catch(e){}})();`;
 
-const bookmarkletCodeBox = document.getElementById("bookmarkletCode");
-const bookmarkletDragLink = document.getElementById("bookmarkletDragLink");
-const copyBookmarkletBtn = document.getElementById("copyBookmarkletBtn");
+function updateVersionDisplay() {
+  const jsVersionEl = document.getElementById("jsVersion");
+  const cssVersionEl = document.getElementById("cssVersion");
 
-bookmarkletCodeBox.value = BOOKMARKLET_CODE;
-bookmarkletDragLink.href = BOOKMARKLET_CODE;
-
-copyBookmarkletBtn.addEventListener("click", async function () {
-  const status = document.getElementById("status");
-
-  try {
-    await navigator.clipboard.writeText(BOOKMARKLET_CODE);
-    status.textContent = "Bookmarklet code copied.";
-  } catch (err) {
-    status.textContent = "Copy failed. Select the bookmarklet text and copy manually.";
-  }
-});
-
-document.getElementById("generateBtn").addEventListener("click", function () {
-  const raw = document.getElementById("rawData").value.trim();
-  const box = document.getElementById("linksContainer");
-  const status = document.getElementById("status");
-
-  box.innerHTML = "";
-
-  if (!raw) {
-    box.textContent = "No data pasted.";
-    status.textContent = "Paste card/PIN data first.";
-    return;
+  if (jsVersionEl) {
+    jsVersionEl.textContent = JS_VERSION;
   }
 
-  const lines = raw.split(/\n+/);
-  let count = 0;
+  if (cssVersionEl) {
+    const cssVersion = getComputedStyle(document.documentElement)
+      .getPropertyValue("--css-version")
+      .replaceAll('"', "")
+      .trim();
 
-  lines.forEach(function(line) {
-    const parts = line.trim().split(/\s+/);
-    if (parts.length < 2) return;
+    cssVersionEl.textContent = cssVersion || "CSS version not found";
+  }
+}
 
-    const code = parts[0];
-    const pin = parts[1];
-    const copyText = code + " " + pin;
+function setupBookmarkletTools() {
+  const bookmarkletCodeBox = document.getElementById("bookmarkletCode");
+  const bookmarkletDragLink = document.getElementById("bookmarkletDragLink");
+  const copyBookmarkletBtn = document.getElementById("copyBookmarkletBtn");
 
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML =
-      "<strong>" + code + "</strong><br>" +
-      "PIN: " + pin + "<br>" +
-      "<span class='small'>Click to copy + open AnyCard</span>";
+  bookmarkletCodeBox.value = BOOKMARKLET_CODE;
+  bookmarkletDragLink.href = BOOKMARKLET_CODE;
 
-    div.addEventListener("click", async function () {
-      document.querySelectorAll(".card").forEach(card => card.classList.remove("clicked"));
-      div.classList.add("clicked");
+  copyBookmarkletBtn.addEventListener("click", async function () {
+    const status = document.getElementById("status");
 
-      try {
-        await navigator.clipboard.writeText(copyText);
-        status.innerHTML = "<span class='ok'>Copied:</span> " + copyText + "<br>Opening AnyCard popup...";
-      } catch (err) {
-        status.textContent = "Copy failed. Manually copy this: " + copyText;
-      }
+    try {
+      await navigator.clipboard.writeText(BOOKMARKLET_CODE);
+      status.textContent = "Bookmarklet code copied.";
+    } catch (err) {
+      status.textContent = "Copy failed. Select the bookmarklet text and copy manually.";
+    }
+  });
+}
 
-      const popupWidth = Math.floor(screen.width * 0.58);
-      const popupHeight = Math.floor(screen.height * 0.92);
-      const popupLeft = Math.floor(screen.width * 0.40);
-      const popupTop = 20;
+function setupGenerator() {
+  document.getElementById("generateBtn").addEventListener("click", function () {
+    const raw = document.getElementById("rawData").value.trim();
+    const box = document.getElementById("linksContainer");
+    const status = document.getElementById("status");
 
-      window.open(
-        ANYCARD_URL,
-        "anycardLoadWindow",
-        "width=" + popupWidth +
-        ",height=" + popupHeight +
-        ",left=" + popupLeft +
-        ",top=" + popupTop +
-        ",resizable=yes,scrollbars=yes"
-      );
+    box.innerHTML = "";
+
+    if (!raw) {
+      box.textContent = "No data pasted.";
+      status.textContent = "Paste card/PIN data first.";
+      return;
+    }
+
+    const lines = raw.split(/\n+/);
+    let count = 0;
+
+    lines.forEach(function(line) {
+      const parts = line.trim().split(/\s+/);
+      if (parts.length < 2) return;
+
+      const code = parts[0];
+      const pin = parts[1];
+      const copyText = code + " " + pin;
+
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML =
+        "<strong>" + code + "</strong><br>" +
+        "PIN: " + pin + "<br>" +
+        "<span class='small'>Click to copy + open AnyCard</span>";
+
+      div.addEventListener("click", async function () {
+        document.querySelectorAll(".card").forEach(card => card.classList.remove("clicked"));
+        div.classList.add("clicked");
+
+        try {
+          await navigator.clipboard.writeText(copyText);
+          status.innerHTML = "<span class='ok'>Copied:</span> " + copyText + "<br>Opening AnyCard popup...";
+        } catch (err) {
+          status.textContent = "Copy failed. Manually copy this: " + copyText;
+        }
+
+        const popupWidth = Math.floor(screen.width * 0.58);
+        const popupHeight = Math.floor(screen.height * 0.92);
+        const popupLeft = Math.floor(screen.width * 0.40);
+        const popupTop = 20;
+
+        window.open(
+          ANYCARD_URL,
+          "anycardLoadWindow",
+          "width=" + popupWidth +
+          ",height=" + popupHeight +
+          ",left=" + popupLeft +
+          ",top=" + popupTop +
+          ",resizable=yes,scrollbars=yes"
+        );
+      });
+
+      box.appendChild(div);
+      count++;
     });
 
-    box.appendChild(div);
-    count++;
+    status.textContent = count ? count + " cards generated." : "No valid card/PIN lines found.";
   });
+}
 
-  status.textContent = count ? count + " cards generated." : "No valid card/PIN lines found.";
-});
+updateVersionDisplay();
+setupBookmarkletTools();
+setupGenerator();
