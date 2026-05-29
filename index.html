@@ -1,118 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anycard Automation Workspace</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8">
+  <title>AnyCard Link Generator</title>
+  <style>
+    body { margin:0; font-family:Arial,sans-serif; background:#0b1020; color:white; }
+    .wrap { display:flex; height:100vh; }
+    .left { width:380px; padding:16px; background:#111827; box-sizing:border-box; }
+    .right { flex:1; padding:24px; }
+    textarea { width:100%; height:260px; background:#020617; color:#22c55e; border:1px solid #374151; padding:10px; box-sizing:border-box; }
+    button { padding:10px 14px; margin:10px 0; cursor:pointer; background:#4f46e5; color:white; border:0; border-radius:6px; font-weight:bold; }
+    .card { padding:10px; margin:8px 0; background:#1f2937; border:1px solid #374151; border-radius:6px; cursor:pointer; }
+    .card:hover { background:#312e81; }
+    .small { color:#9ca3af; font-size:13px; }
+    a { color:#93c5fd; }
+  </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans h-screen flex flex-col overflow-hidden">
+<body>
+  <div class="wrap">
+    <div class="left">
+      <h2>AnyCard</h2>
+      <div class="small">Paste card number + PIN, one per line</div>
 
-    <header class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex items-center justify-between shadow-md">
-        <div class="flex items-center space-x-3">
-            <span class="text-xl font-black tracking-wider text-indigo-400">ANYCARD</span>
-            <span class="text-xs bg-indigo-900/50 text-indigo-300 border border-indigo-700/50 px-2.5 py-0.5 rounded-full font-mono">Workspace v1.1</span>
-        </div>
-        <div class="text-sm text-gray-400">
-            Target Host: <span class="font-mono text-green-400">anycard.ca (New Tab Mode)</span>
-        </div>
-    </header>
+      <textarea id="rawData">1249991753102417018 8104</textarea>
 
-    <div class="flex-grow flex overflow-hidden">
-        
-        <div class="w-96 flex flex-col border-r border-gray-700 bg-gray-800/50 divide-y divide-gray-700">
-            
-            <div class="p-4 flex flex-col h-1/2 min-h-[300px]">
-                <div class="flex items-center justify-between mb-2">
-                    <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Frame 1: Raw Batch Input</label>
-                    <button onclick="generateLinks()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-1.5 rounded shadow transition-all active:scale-95">
-                        Generate Links
-                    </button>
-                </div>
-                <textarea id="rawData" class="w-full flex-grow p-3 bg-gray-950 border border-gray-700 rounded font-mono text-xs text-green-400 focus:outline-none focus:border-indigo-500 resize-none placeholder-gray-600" placeholder="Paste raw data here:&#10;1249991753102417018&#9;8104&#10;1249991752702001123&#9;7998"></textarea>
-            </div>
+      <button id="generateBtn">Generate Links</button>
 
-            <div class="p-4 flex flex-col h-1/2 overflow-hidden">
-                <div class="flex items-center justify-between mb-2">
-                    <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Frame 2: Generated Queues</label>
-                    <span id="queueCount" class="text-xs font-mono text-gray-500">0 items</span>
-                </div>
-                <div id="linksContainer" class="flex-grow overflow-y-auto space-y-2 pr-1 flex flex-col items-center justify-center text-gray-600 border border-dashed border-gray-700 rounded bg-gray-950/30">
-                    <p class="text-xs text-center px-4">Awaiting raw data generation...</p>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="flex-grow bg-gray-950 flex flex-col p-6 overflow-y-auto">
-            <div class="max-w-2xl">
-                <h3 class="text-lg font-bold text-gray-200 mb-2">Workspace Activity Tracker</h3>
-                <p class="text-sm text-gray-400 mb-6">
-                    Clicking any card on the left sidebar will launch a secure, independent tab with prefilled parameters directly on the vendor portal.
-                </p>
-                
-                <div class="bg-gray-900 border border-gray-800 rounded-lg p-4 font-mono text-xs space-y-2">
-                    <div class="text-gray-500">// System Log Status</div>
-                    <div class="flex items-center space-x-2">
-                        <span class="inline-block w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                        <span class="text-gray-300">Workspace listening for interaction...</span>
-                    </div>
-                    <div id="logContainer" class="pt-2 border-t border-gray-800/60 space-y-1.5 hidden">
-                        <div class="text-indigo-400">Last opened profile path:</div>
-                        <div id="lastOpenedUrl" class="text-gray-400 break-all select-all bg-gray-950 p-2 rounded border border-gray-800"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+      <h3>Generated Links</h3>
+      <div id="linksContainer" class="small">No links yet.</div>
     </div>
 
-    <script>
-        function generateLinks() {
-            const rawText = document.getElementById('rawData').value.trim();
-            const container = document.getElementById('linksContainer');
-            const queueCountDisplay = document.getElementById('queueCount');
-            
-            container.innerHTML = '';
-            container.className = "flex-grow overflow-y-auto space-y-1.5 pr-1";
+    <div class="right">
+      <h1>Workspace</h1>
+      <p>Click a generated card on the left. It will open AnyCard in a new tab.</p>
+      <p id="status" class="small">Waiting...</p>
+    </div>
+  </div>
 
-            if (!rawText) {
-                container.className = "flex-grow overflow-y-auto flex flex-col items-center justify-center text-gray-600 border border-dashed border-gray-700 rounded bg-gray-950/30";
-                container.innerHTML = '<p class="text-xs text-center px-4">Awaiting raw data generation...</p>';
-                queueCountDisplay.innerText = '0 items';
-                return;
-            }
+  <script>
+    document.getElementById("generateBtn").addEventListener("click", function () {
+      const raw = document.getElementById("rawData").value.trim();
+      const box = document.getElementById("linksContainer");
+      const status = document.getElementById("status");
 
-            const lines = rawText.split('\n');
-            let generatedCount = 0;
+      box.innerHTML = "";
 
-            lines.forEach((line) => {
-                const parts = line.trim().split(/\s+/); 
-                if (parts.length >= 2) {
-                    const code = parts[0];
-                    const pin = parts[1];
-                    generatedCount++;
+      if (!raw) {
+        box.textContent = "No data pasted.";
+        return;
+      }
 
-                    const targetUrl = `https://anycard.ca/swap/loadcard?code=${encodeURIComponent(code)}&pin=${encodeURIComponent(pin)}`;
+      const lines = raw.split(/\n+/);
+      let count = 0;
 
-                    const item = document.createElement('div');
-                    item.className = "group bg-gray-800 hover:bg-indigo-950/40 border border-gray-700 hover:border-indigo-500/50 p-2.5 rounded cursor-pointer transition-all flex items-center justify-between w-full text-left";
-                    
-                    item.onclick = function() {
-                        document.querySelectorAll('.group').forEach(el => el.classList.remove('border-indigo-500', 'bg-indigo-950/30'));
-                        item.classList.add('border-indigo-500', 'bg-indigo-950/30');
-                        
-                        window.open(targetUrl, '_blank');
+      lines.forEach(function(line) {
+        const parts = line.trim().split(/\s+/);
+        if (parts.length < 2) return;
 
-                        document.getElementById('logContainer').classList.remove('hidden');
-                        document.getElementById('lastOpenedUrl').innerText = targetUrl;
-                    };
+        const code = parts[0];
+        const pin = parts[1];
 
-                    item.innerHTML = `
-                        <div class="flex flex-col space-y-0.5 pointer-events-none">
-                            <span class="text-xs font-mono font-bold text-gray-200 group-hover:text-indigo-300">Code: ${code}</span>
-                            <span class="text-[10px] font-mono text-gray-400">PIN: <span class="text-green-500">${pin}</span></span>
-                        </div>
-                        <div class="text-gray-500 group-hover:text-indigo-400 transition-colors pointer-events-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round"
+        const url =
+          "https://anycard.ca/swap/loadcard?code=" +
+          encodeURIComponent(code) +
+          "&pin=" +
+          encodeURIComponent(pin);
+
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = "<strong>" + code + "</strong><br>PIN: " + pin;
+
+        div.addEventListener("click", function () {
+          status.innerHTML = 'Opened: <a href="' + url + '" target="_blank">' + url + "</a>";
+          window.open(url, "_blank");
+        });
+
+        box.appendChild(div);
+        count++;
+      });
+
+      if (count === 0) {
+        box.textContent = "No valid card/PIN lines found.";
+      } else {
+        status.textContent = count + " links generated.";
+      }
+    });
+  </script>
+</body>
+</html>
