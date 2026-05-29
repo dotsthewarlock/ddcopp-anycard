@@ -1,5 +1,5 @@
 :root {
-  --css-version: "CSS v2.0 VERSION SYSTEM";
+  --css-version: "V1.00.01";
 }
 
 body {
@@ -121,8 +121,14 @@ button:hover {
   padding: 8px;
   margin-bottom: 12px;
   line-height: 1.5;
+  max-width: 180px;
 }
 
+.version-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
 h1,
 h2,
 h3 {
