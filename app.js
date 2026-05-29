@@ -1,86 +1,102 @@
-const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AnyCard Workspace</title>
 
-const BOOKMARKLET_CODE = `javascript:(async function(){try{var text=await navigator.clipboard.readText();var parts=text.trim().split(/\\s+/);if(parts.length<2)return;var cardInput=parts[0];var pinInput=parts[1];var cardField=document.querySelector('input[placeholder*="Card Number"]');var pinField=document.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField)return;cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event("input",{bubbles:true}));pinField.dispatchEvent(new Event("input",{bubbles:true}));setTimeout(function(){var btn=[...document.querySelectorAll("button,input[type='submit']")].find(function(el){return /submit card info/i.test(el.innerText||el.value||"")});if(btn)btn.click();},300);}catch(e){}})();`;
+  <link rel="stylesheet" href="styles.css?v=18">
+</head>
 
-const bookmarkletCodeBox = document.getElementById("bookmarkletCode");
-const bookmarkletDragLink = document.getElementById("bookmarkletDragLink");
-const copyBookmarkletBtn = document.getElementById("copyBookmarkletBtn");
+<body>
 
-bookmarkletCodeBox.value = BOOKMARKLET_CODE;
-bookmarkletDragLink.href = BOOKMARKLET_CODE;
+<div class="wrap">
 
-copyBookmarkletBtn.addEventListener("click", async function () {
-  const status = document.getElementById("status");
+  <div class="left">
 
-  try {
-    await navigator.clipboard.writeText(BOOKMARKLET_CODE);
-    status.textContent = "Bookmarklet code copied.";
-  } catch (err) {
-    status.textContent = "Copy failed. Select the bookmarklet text and copy manually.";
-  }
-});
+    <h2>AnyCard Workspace</h2>
 
-document.getElementById("generateBtn").addEventListener("click", function () {
-  const raw = document.getElementById("rawData").value.trim();
-  const box = document.getElementById("linksContainer");
-  const status = document.getElementById("status");
+    <div class="small">
+      v1.8 CSS SPLIT
+    </div>
 
-  box.innerHTML = "";
+    <p class="small">
+      Paste card number + PIN, one per line.
+    </p>
 
-  if (!raw) {
-    box.textContent = "No data pasted.";
-    status.textContent = "Paste card/PIN data first.";
-    return;
-  }
+    <textarea
+      id="rawData"
+      placeholder="1249991700000000000 0000&#10;1249991700000000001 0000&#10;1249991700000000002 0000"></textarea>
 
-  const lines = raw.split(/\n+/);
-  let count = 0;
+    <button id="generateBtn">
+      Generate Links
+    </button>
 
-  lines.forEach(function(line) {
-    const parts = line.trim().split(/\s+/);
-    if (parts.length < 2) return;
+    <h3>Generated Cards</h3>
 
-    const code = parts[0];
-    const pin = parts[1];
-    const copyText = code + " " + pin;
+    <div id="linksContainer" class="small">
+      No links yet.
+    </div>
 
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML =
-      "<strong>" + code + "</strong><br>" +
-      "PIN: " + pin + "<br>" +
-      "<span class='small'>Click to copy + open AnyCard</span>";
+  </div>
 
-    div.addEventListener("click", async function () {
-      document.querySelectorAll(".card").forEach(card => card.classList.remove("clicked"));
-      div.classList.add("clicked");
+  <div class="right">
 
-      try {
-        await navigator.clipboard.writeText(copyText);
-        status.innerHTML = "<span class='ok'>Copied:</span> " + copyText + "<br>Opening AnyCard popup...";
-      } catch (err) {
-        status.textContent = "Copy failed. Manually copy this: " + copyText;
-      }
+    <h1>Instructions</h1>
 
-      const popupWidth = Math.floor(screen.width * 0.58);
-      const popupHeight = Math.floor(screen.height * 0.92);
-      const popupLeft = Math.floor(screen.width * 0.40);
-      const popupTop = 20;
+    <h3>Step 1: Install the bookmarklet once</h3>
 
-      window.open(
-        ANYCARD_URL,
-        "anycardLoadWindow",
-        "width=" + popupWidth +
-        ",height=" + popupHeight +
-        ",left=" + popupLeft +
-        ",top=" + popupTop +
-        ",resizable=yes,scrollbars=yes"
-      );
-    });
+    <p>
+      Show bookmarks bar:
+      <strong>Ctrl + Shift + B</strong>
+    </p>
 
-    box.appendChild(div);
-    count++;
-  });
+    <p>
+      Drag this green link to your bookmarks bar:
+    </p>
 
-  status.textContent = count ? count + " cards generated." : "No valid card/PIN lines found.";
-});
+    <p>
+      <a
+        id="bookmarkletDragLink"
+        class="bookmarklet-link"
+        href="#">
+        AnyCard Fill + Submit
+      </a>
+    </p>
+
+    <p class="small">
+      Backup option:
+    </p>
+
+    <button id="copyBookmarkletBtn">
+      Copy Bookmarklet Code
+    </button>
+
+    <textarea
+      id="bookmarkletCode"
+      readonly></textarea>
+
+    <h3>Step 2: Workflow</h3>
+
+    <ol>
+      <li>Paste card + PIN data.</li>
+      <li>Generate Links.</li>
+      <li>Click a card.</li>
+      <li>AnyCard opens in popup.</li>
+      <li>Click bookmarklet.</li>
+      <li>Card auto-fills and submits.</li>
+    </ol>
+
+    <h3>Status</h3>
+
+    <p id="status" class="small">
+      Waiting...
+    </p>
+
+  </div>
+
+</div>
+
+<script src="app.js?v=18"></script>
+
+</body>
+</html>
