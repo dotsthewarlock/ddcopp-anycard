@@ -1,5 +1,5 @@
 :root {
-  --css-version: "V1.00.03";
+  --css-version: "V1.00.04";
 }
 
 body {
@@ -16,7 +16,7 @@ body {
 }
 
 .left {
-  width: 315px;
+  width: 280px;
   padding: 14px;
   background: #111827;
   box-sizing: border-box;
