@@ -14,7 +14,7 @@ body {
 }
 
 .left {
-  width: 420px;
+  width: 360px;
   padding: 16px;
   background: #111827;
   box-sizing: border-box;
@@ -38,7 +38,8 @@ textarea {
 }
 
 #rawData {
-  height: 280px;
+  height: 210px;
+  overflow-y: auto;
 }
 
 #bookmarkletCode {
