@@ -1,5 +1,20 @@
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 
+const BOOKMARKLET_CODE = `javascript:(async function(){try{var text=await navigator.clipboard.readText();var parts=text.trim().split(/\\s+/);if(parts.length<2)return;var cardInput=parts[0];var pinInput=parts[1];var cardField=document.querySelector('input[placeholder*="Card Number"]');var pinField=document.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField)return;cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event("input",{bubbles:true}));pinField.dispatchEvent(new Event("input",{bubbles:true}));setTimeout(function(){var btn=[...document.querySelectorAll("button,input[type='submit']")].find(function(el){return /submit card info/i.test(el.innerText||el.value||"")});if(btn)btn.click();},300);}catch(e){}})();`;
+
+document.getElementById("bookmarkletCode").value = BOOKMARKLET_CODE;
+
+document.getElementById("copyBookmarkletBtn").addEventListener("click", async function () {
+  const status = document.getElementById("status");
+
+  try {
+    await navigator.clipboard.writeText(BOOKMARKLET_CODE);
+    status.textContent = "Bookmarklet code copied.";
+  } catch (err) {
+    status.textContent = "Copy failed. Select the bookmarklet text and copy manually.";
+  }
+});
+
 document.getElementById("generateBtn").addEventListener("click", function () {
   const raw = document.getElementById("rawData").value.trim();
   const box = document.getElementById("linksContainer");
@@ -62,10 +77,5 @@ document.getElementById("generateBtn").addEventListener("click", function () {
     count++;
   });
 
-  if (count === 0) {
-    box.textContent = "No valid card/PIN lines found.";
-    status.textContent = "Expected format: cardnumber PIN";
-  } else {
-    status.textContent = count + " cards generated.";
-  }
+  status.textContent = count ? count + " cards generated." : "No valid card/PIN lines found.";
 });
