@@ -1,3 +1,7 @@
+:root {
+  --css-version: "CSS v2.0 VERSION SYSTEM";
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -106,6 +110,17 @@ button:hover {
 
 .ok {
   color: #22c55e;
+}
+
+.version-box {
+  color: #9ca3af;
+  font-size: 12px;
+  background: #020617;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 12px;
+  line-height: 1.5;
 }
 
 h1,
