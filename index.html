@@ -3,48 +3,185 @@
 <head>
   <meta charset="utf-8">
   <title>AnyCard Workspace</title>
+
   <style>
-    body { margin:0; font-family:Arial,sans-serif; background:#0b1020; color:white; }
-    .wrap { display:flex; min-height:100vh; }
-    .left { width:420px; padding:16px; background:#111827; box-sizing:border-box; }
-    .right { flex:1; padding:24px; }
-    textarea { width:100%; height:280px; background:#020617; color:#22c55e; border:1px solid #374151; padding:10px; box-sizing:border-box; font-family:monospace; }
-    button { padding:10px 14px; margin:10px 0; cursor:pointer; background:#4f46e5; color:white; border:0; border-radius:6px; font-weight:bold; }
-    .card { padding:10px; margin:8px 0; background:#1f2937; border:1px solid #374151; border-radius:6px; cursor:pointer; }
-    .card:hover { background:#312e81; }
-    .card.clicked { background:#bbf7d0; color:#052e16; border-color:#22c55e; }
-    .card.clicked .small { color:#166534; }
-    .small { color:#9ca3af; font-size:13px; }
-    .ok { color:#22c55e; }
-    a { color:#93c5fd; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1020;
+      color: white;
+    }
+
+    .wrap {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .left {
+      width: 420px;
+      padding: 16px;
+      background: #111827;
+      box-sizing: border-box;
+      border-right: 1px solid #374151;
+    }
+
+    .right {
+      flex: 1;
+      padding: 24px;
+    }
+
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      background: #020617;
+      color: #22c55e;
+      border: 1px solid #374151;
+      padding: 10px;
+      font-family: monospace;
+      border-radius: 6px;
+    }
+
+    #rawData {
+      height: 280px;
+    }
+
+    #bookmarkletCode {
+      height: 140px;
+      color: #cbd5e1;
+    }
+
+    button {
+      padding: 10px 14px;
+      margin: 10px 0;
+      cursor: pointer;
+      background: #4f46e5;
+      color: white;
+      border: 0;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #4338ca;
+    }
+
+    .card {
+      padding: 10px;
+      margin: 8px 0;
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .card:hover {
+      background: #312e81;
+    }
+
+    .card.clicked {
+      background: #bbf7d0;
+      color: #052e16;
+      border-color: #22c55e;
+    }
+
+    .card.clicked .small {
+      color: #166534;
+    }
+
+    .small {
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    .ok {
+      color: #22c55e;
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    ol li {
+      margin-bottom: 8px;
+    }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="left">
-      <h2>AnyCard Workspace</h2>
-      <div class="small">v1.5 JS SPLIT</div>
-      <p class="small">Paste card number + PIN, one per line.</p>
 
-      <textarea id="rawData" placeholder="1249991700000000000 0000&#10;1249991700000000001 0000&#10;1249991700000000002 0000"></textarea>
+<div class="wrap">
 
-      <button id="generateBtn">Generate Links</button>
+  <div class="left">
 
-      <h3>Generated Cards</h3>
-      <div id="linksContainer" class="small">No links yet.</div>
+    <h2>AnyCard Workspace</h2>
+
+    <div class="small">
+      v1.6 BOOKMARKLET HELP
     </div>
 
-    <div class="right">
-      <h1>Instructions</h1>
-      <p>Click a generated card on the left.</p>
-      <p>It will copy the card/PIN to your clipboard and open AnyCard in a right-side popup window.</p>
-      <p>Then click your AnyCard bookmarklet on the AnyCard page.</p>
+    <p class="small">
+      Paste card number + PIN, one per line.
+    </p>
 
-      <h3>Status</h3>
-      <p id="status" class="small">Waiting...</p>
+    <textarea
+      id="rawData"
+      placeholder="1249991700000000000 0000&#10;1249991700000000001 0000&#10;1249991700000000002 0000"></textarea>
+
+    <button id="generateBtn">
+      Generate Links
+    </button>
+
+    <h3>Generated Cards</h3>
+
+    <div id="linksContainer" class="small">
+      No links yet.
     </div>
+
   </div>
 
-  <script src="app.js?v=15"></script>
+  <div class="right">
+
+    <h1>Instructions</h1>
+
+    <h3>Step 1: Create the bookmarklet</h3>
+
+    <p>
+      Click the button below to copy the bookmarklet code.
+      Create a bookmark in Chrome and paste the copied code into the URL field.
+    </p>
+
+    <button id="copyBookmarkletBtn">
+      Copy Bookmarklet Code
+    </button>
+
+    <textarea
+      id="bookmarkletCode"
+      readonly></textarea>
+
+    <h3>Step 2: Use the workflow</h3>
+
+    <ol>
+      <li>Paste card + PIN data on the left.</li>
+      <li>Click <strong>Generate Links</strong>.</li>
+      <li>Click a generated card.</li>
+      <li>The card/PIN is copied to clipboard.</li>
+      <li>AnyCard opens in the popup window.</li>
+      <li>Click your bookmarklet.</li>
+      <li>The bookmarklet fills the fields and submits automatically.</li>
+    </ol>
+
+    <h3>Status</h3>
+
+    <p id="status" class="small">
+      Waiting...
+    </p>
+
+  </div>
+
+</div>
+
+<script src="app.js?v=16"></script>
+
 </body>
 </html>
