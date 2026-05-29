@@ -1,4 +1,4 @@
-const JS_VERSION = "V1.00.01";
+const JS_VERSION = "V1.00.02";
 
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 
@@ -70,9 +70,10 @@ function setupGenerator() {
       const div = document.createElement("div");
       div.className = "card";
       div.innerHTML =
-        "<strong>" + code + "</strong><br>" +
-        "PIN: " + pin + "<br>" +
-        "<span class='small'>Click to copy + open AnyCard</span>";
+  "<div class='card-line'>" +
+    "<span class='card-code'>" + code + "</span>" +
+    "<span class='card-pin'>PIN: " + pin + "</span>" +
+  "</div>";
 
       div.addEventListener("click", async function () {
         document.querySelectorAll(".card").forEach(card => card.classList.remove("clicked"));
