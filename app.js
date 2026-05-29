@@ -2,9 +2,14 @@ const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 
 const BOOKMARKLET_CODE = `javascript:(async function(){try{var text=await navigator.clipboard.readText();var parts=text.trim().split(/\\s+/);if(parts.length<2)return;var cardInput=parts[0];var pinInput=parts[1];var cardField=document.querySelector('input[placeholder*="Card Number"]');var pinField=document.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField)return;cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event("input",{bubbles:true}));pinField.dispatchEvent(new Event("input",{bubbles:true}));setTimeout(function(){var btn=[...document.querySelectorAll("button,input[type='submit']")].find(function(el){return /submit card info/i.test(el.innerText||el.value||"")});if(btn)btn.click();},300);}catch(e){}})();`;
 
-document.getElementById("bookmarkletCode").value = BOOKMARKLET_CODE;
+const bookmarkletCodeBox = document.getElementById("bookmarkletCode");
+const bookmarkletDragLink = document.getElementById("bookmarkletDragLink");
+const copyBookmarkletBtn = document.getElementById("copyBookmarkletBtn");
 
-document.getElementById("copyBookmarkletBtn").addEventListener("click", async function () {
+bookmarkletCodeBox.value = BOOKMARKLET_CODE;
+bookmarkletDragLink.href = BOOKMARKLET_CODE;
+
+copyBookmarkletBtn.addEventListener("click", async function () {
   const status = document.getElementById("status");
 
   try {
