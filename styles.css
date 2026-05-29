@@ -1,6 +1,7 @@
 :root {
-  --css-version: "V1.00.02";
+  --css-version: "V1.00.03";
 }
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -10,20 +11,26 @@ body {
 
 .wrap {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .left {
-  width: 360px;
-  padding: 16px;
+  width: 315px;
+  padding: 14px;
   background: #111827;
   box-sizing: border-box;
   border-right: 1px solid #374151;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .right {
   flex: 1;
   padding: 24px;
+  overflow-y: auto;
 }
 
 textarea {
@@ -38,7 +45,7 @@ textarea {
 }
 
 #rawData {
-  height: 210px;
+  height: 185px;
   overflow-y: auto;
 }
 
@@ -46,6 +53,13 @@ textarea {
   height: 140px;
   color: #cbd5e1;
   font-size: 12px;
+}
+
+#linksContainer {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding-right: 4px;
 }
 
 button {
@@ -80,13 +94,14 @@ button:hover {
 }
 
 .card {
-  padding: 10px;
-  margin: 8px 0;
+  padding: 8px;
+  margin: 6px 0;
   background: #1f2937;
   border: 1px solid #374151;
   border-radius: 6px;
   cursor: pointer;
   transition: 0.15s;
+  font-size: 12px;
 }
 
 .card:hover {
@@ -101,6 +116,22 @@ button:hover {
 
 .card.clicked .small {
   color: #166534;
+}
+
+.card-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.card-code {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-pin {
+  flex-shrink: 0;
 }
 
 .small {
@@ -124,11 +155,13 @@ button:hover {
   width: 100%;
   box-sizing: border-box;
 }
+
 .version-row {
   display: flex;
   justify-content: space-between;
   gap: 24px;
 }
+
 h1,
 h2,
 h3 {
