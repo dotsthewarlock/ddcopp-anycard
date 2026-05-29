@@ -1,4 +1,4 @@
-const JS_VERSION = "JS v2.0 VERSION SYSTEM";
+const JS_VERSION = "V1.00.01";
 
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 
@@ -18,7 +18,7 @@ function updateVersionDisplay() {
       .replaceAll('"', "")
       .trim();
 
-    cssVersionEl.textContent = cssVersion || "CSS version not found";
+    cssVersionEl.textContent = cssVersion || "not found";
   }
 }
 
