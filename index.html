@@ -55,4 +55,45 @@
                     <div class="text-gray-500">// System Log Status</div>
                     <div class="flex items-center space-x-2">
                         <span class="inline-block w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                        <span class="text-gray-3
+                        <span class="text-gray-300">Workspace listening for interaction...</span>
+                    </div>
+                    <div id="logContainer" class="pt-2 border-t border-gray-800/60 space-y-1.5 hidden">
+                        <div class="text-indigo-400">Last opened profile path:</div>
+                        <div id="lastOpenedUrl" class="text-gray-400 break-all select-all bg-gray-950 p-2 rounded border border-gray-800"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function generateLinks() {
+            const rawText = document.getElementById('rawData').value.trim();
+            const container = document.getElementById('linksContainer');
+            const queueCountDisplay = document.getElementById('queueCount');
+            
+            container.innerHTML = '';
+            container.className = "flex-grow overflow-y-auto space-y-1.5 pr-1";
+
+            if (!rawText) {
+                container.className = "flex-grow overflow-y-auto flex flex-col items-center justify-center text-gray-600 border border-dashed border-gray-700 rounded bg-gray-950/30";
+                container.innerHTML = '<p class="text-xs text-center px-4">Awaiting raw data generation...</p>';
+                queueCountDisplay.innerText = '0 items';
+                return;
+            }
+
+            const lines = rawText.split('\n');
+            let generatedCount = 0;
+
+            lines.forEach((line) => {
+                const parts = line.trim().split(/\s+/); 
+                if (parts.length >= 2) {
+                    const code = parts[0];
+                    const pin = parts[1];
+                    generatedCount++;
+
+                    const targetUrl = `https://anycard.ca/swap/loadcard?code=${encodeURIComponent(code)}&pin=${encodeURIComponent(pin)}`;
+
+                    const item = document.createElement('div');
+                    item.className = "group bg
