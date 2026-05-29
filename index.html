@@ -5,39 +5,47 @@
   <title>AnyCard Link Generator</title>
   <style>
     body { margin:0; font-family:Arial,sans-serif; background:#0b1020; color:white; }
-    .wrap { display:flex; height:100vh; }
-    .left { width:380px; padding:16px; background:#111827; box-sizing:border-box; }
+    .wrap { display:flex; min-height:100vh; }
+    .left { width:420px; padding:16px; background:#111827; box-sizing:border-box; }
     .right { flex:1; padding:24px; }
-    textarea { width:100%; height:260px; background:#020617; color:#22c55e; border:1px solid #374151; padding:10px; box-sizing:border-box; }
+    textarea { width:100%; height:280px; background:#020617; color:#22c55e; border:1px solid #374151; padding:10px; box-sizing:border-box; font-family:monospace; }
     button { padding:10px 14px; margin:10px 0; cursor:pointer; background:#4f46e5; color:white; border:0; border-radius:6px; font-weight:bold; }
     .card { padding:10px; margin:8px 0; background:#1f2937; border:1px solid #374151; border-radius:6px; cursor:pointer; }
     .card:hover { background:#312e81; }
     .small { color:#9ca3af; font-size:13px; }
+    .ok { color:#22c55e; }
     a { color:#93c5fd; }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="left">
-      <h2>AnyCard</h2>
-      <div class="small">Paste card number + PIN, one per line</div>
+      <h2>AnyCard Workspace</h2>
+      <div class="small">v1.3 CLIPBOARD</div>
+      <p class="small">Paste card number + PIN, one per line.</p>
 
-      <textarea id="rawData">1249991753102417018 8104</textarea>
+      <textarea id="rawData" placeholder="1249991753102417018 8104&#10;1249991752702001123 7998"></textarea>
 
       <button id="generateBtn">Generate Links</button>
 
-      <h3>Generated Links</h3>
+      <h3>Generated Cards</h3>
       <div id="linksContainer" class="small">No links yet.</div>
     </div>
 
     <div class="right">
-      <h1>Workspace</h1>
-      <p>Click a generated card on the left. It will open AnyCard in a new tab.</p>
+      <h1>Instructions</h1>
+      <p>Click a generated card on the left.</p>
+      <p>It will copy the card/PIN to your clipboard and open AnyCard.</p>
+      <p>Then click your AnyCard bookmarklet on the AnyCard page.</p>
+
+      <h3>Status</h3>
       <p id="status" class="small">Waiting...</p>
     </div>
   </div>
 
   <script>
+    const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
+
     document.getElementById("generateBtn").addEventListener("click", function () {
       const raw = document.getElementById("rawData").value.trim();
       const box = document.getElementById("linksContainer");
@@ -47,6 +55,7 @@
 
       if (!raw) {
         box.textContent = "No data pasted.";
+        status.textContent = "Paste card/PIN data first.";
         return;
       }
 
@@ -59,20 +68,24 @@
 
         const code = parts[0];
         const pin = parts[1];
-
-        const url =
-          "https://anycard.ca/swap/loadcard?code=" +
-          encodeURIComponent(code) +
-          "&pin=" +
-          encodeURIComponent(pin);
+        const copyText = code + " " + pin;
 
         const div = document.createElement("div");
         div.className = "card";
-        div.innerHTML = "<strong>" + code + "</strong><br>PIN: " + pin;
+        div.innerHTML =
+          "<strong>" + code + "</strong><br>" +
+          "PIN: " + pin + "<br>" +
+          "<span class='small'>Click to copy + open AnyCard</span>";
 
-        div.addEventListener("click", function () {
-          status.innerHTML = 'Opened: <a href="' + url + '" target="_blank">' + url + "</a>";
-          window.open(url, "_blank");
+        div.addEventListener("click", async function () {
+          try {
+            await navigator.clipboard.writeText(copyText);
+            status.innerHTML = "<span class='ok'>Copied:</span> " + copyText + "<br>Opening AnyCard...";
+          } catch (err) {
+            status.textContent = "Copy failed. Manually copy this: " + copyText;
+          }
+
+          window.open(ANYCARD_URL, "_blank");
         });
 
         box.appendChild(div);
@@ -81,8 +94,9 @@
 
       if (count === 0) {
         box.textContent = "No valid card/PIN lines found.";
+        status.textContent = "Expected format: cardnumber PIN";
       } else {
-        status.textContent = count + " links generated.";
+        status.textContent = count + " cards generated.";
       }
     });
   </script>
