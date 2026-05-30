@@ -1,4 +1,4 @@
-const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.05";
+const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.06";
 
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 const PROCESSED_CARDS_KEY = "anycard.processedCards.v1";
@@ -60,6 +60,14 @@ function saveGeneratedCards(cards) {
   }
 }
 
+function clearGeneratedCards() {
+  try {
+    localStorage.removeItem(GENERATED_CARDS_KEY);
+  } catch (err) {
+    // Keep the workflow usable if localStorage is unavailable.
+  }
+}
+
 function getRawData() {
   try {
     return localStorage.getItem(RAW_DATA_KEY) || "";
@@ -73,6 +81,14 @@ function saveRawData(rawData) {
     localStorage.setItem(RAW_DATA_KEY, rawData);
   } catch (err) {
     // Keep the workflow usable if localStorage is unavailable or full.
+  }
+}
+
+function clearRawData() {
+  try {
+    localStorage.removeItem(RAW_DATA_KEY);
+  } catch (err) {
+    // Keep the workflow usable if localStorage is unavailable.
   }
 }
 
@@ -218,6 +234,8 @@ function setupGenerator() {
   const rawDataEl = document.getElementById("rawData");
   const box = document.getElementById("linksContainer");
   const status = document.getElementById("status");
+  const clearRawDataBtn = document.getElementById("clearRawDataBtn");
+  const clearGeneratedLinksBtn = document.getElementById("clearGeneratedLinksBtn");
 
   restoreRawData(rawDataEl);
   restoreGeneratedCards(box, status);
@@ -248,6 +266,18 @@ function setupGenerator() {
     renderGeneratedCards(cards, box, status);
     saveGeneratedCards(cards);
     status.textContent = cards.length + " cards generated.";
+  });
+
+  clearRawDataBtn.addEventListener("click", function () {
+    rawDataEl.value = "";
+    clearRawData();
+    status.textContent = "Raw data cleared.";
+  });
+
+  clearGeneratedLinksBtn.addEventListener("click", function () {
+    clearGeneratedCards();
+    box.textContent = "No cards generated yet.";
+    status.textContent = "Generated cards cleared. Completed card tracking was preserved.";
   });
 }
 
