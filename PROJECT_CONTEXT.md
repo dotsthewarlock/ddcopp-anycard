@@ -29,6 +29,7 @@ GitHub commit → GitHub Pages deployment → Cloudflare DNS → Live website
 - No build process
 - No database
 - No backend (unless added later)
+Development workflow: Use DEV_WORKFLOW.md. The assistant may auto-select FAST or REV mode unless the user explicitly specifies a mode. Bias toward FAST for small low-risk AnyCard changes.
 
 ## Important Files
 - index.html
