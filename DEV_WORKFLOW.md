@@ -110,6 +110,15 @@ Do not spend significant time on REV analysis before asking.
 
 Version and cache-busting alignment are blocking release requirements.
 
+HTML, CSS, and JavaScript maintain independent version tracks. Do not expect the HTML, CSS, and JavaScript version numbers to match each other.
+
+Only the related version/cache-busting pairs must match:
+
+- `app.js` version and the `ANYCARD_JS_VERSION` cache-busting value in `index.html`
+- `styles.css` `--css-version` and the stylesheet cache-busting query string in `index.html`
+
+A difference between HTML, CSS, and JavaScript version numbers is normal and is not a release blocker.
+
 When a changed file depends on a version/cache-busting reference for users to receive the current code, that reference must be updated in the same implementation pass.
 
 Examples:
