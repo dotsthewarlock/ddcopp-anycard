@@ -1,11 +1,14 @@
-const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.07";
+const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.08";
 
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
+const TARGET_WINDOW_NAME = "anycardTargetWindow";
 const PROCESSED_CARDS_KEY = "anycard.processedCards.v1";
 const GENERATED_CARDS_KEY = "anycard.generatedCards.v1";
 const RAW_DATA_KEY = "anycard.rawData.v1";
 
-const BOOKMARKLET_CODE = `javascript:(async function(){try{if(location.origin+location.pathname!=="https://www.anycard.ca/swap/loadcard")return;var text=await navigator.clipboard.readText();var parts=text.trim().split(/\\s+/);if(parts.length<2)return;var cardInput=parts[0];var pinInput=parts[1];var cardField=document.querySelector('input[placeholder*="Card Number"]');var pinField=document.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField)return;cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event("input",{bubbles:true}));pinField.dispatchEvent(new Event("input",{bubbles:true}));setTimeout(function(){var btn=[...document.querySelectorAll("button,input[type='submit']")].find(function(el){return /submit card info/i.test(el.innerText||el.value||"")});if(btn)btn.click();},300);}catch(e){}})();`;
+window.anycardTargetWindow = window.anycardTargetWindow || null;
+
+const BOOKMARKLET_CODE = `javascript:(async function(){var targetUrl="https://www.anycard.ca/swap/loadcard";var targetName="anycardTargetWindow";function setStatus(message){try{var status=document.getElementById("status");if(status)status.textContent=message;}catch(err){}}async function fillWindow(doc,targetWindow){var text=await navigator.clipboard.readText();var parts=text.trim().split(/\s+/);if(parts.length<2){setStatus("No card/PIN found on clipboard.");return false;}var cardInput=parts[0];var pinInput=parts[1];var cardField=doc.querySelector('input[placeholder*="Card Number"]');var pinField=doc.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField){setStatus("Target Window is not ready. Open a Card Link, then try the Bookmarklet again.");return false;}cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event("input",{bubbles:true}));pinField.dispatchEvent(new Event("input",{bubbles:true}));setTimeout(function(){var btn=[...doc.querySelectorAll("button,input[type='submit']")].find(function(el){return /submit card info/i.test(el.innerText||el.value||"")});if(btn)btn.click();},300);try{if(targetWindow&&targetWindow.focus)targetWindow.focus();}catch(err){}setStatus("Target Window filled.");return true;}try{if(location.origin+location.pathname===targetUrl){await fillWindow(document,window);return;}var targetWindow=window.anycardTargetWindow||window.open("",targetName);window.anycardTargetWindow=targetWindow;if(!targetWindow||targetWindow.closed){targetWindow=window.open(targetUrl,targetName);window.anycardTargetWindow=targetWindow;setStatus("Target Window opened. Try the Bookmarklet again after it loads.");return;}try{if(targetWindow.location&&targetWindow.location.href==="about:blank"){targetWindow.location.href=targetUrl;setStatus("Target Window opened. Try the Bookmarklet again after it loads.");return;}}catch(err){}try{await fillWindow(targetWindow.document,targetWindow);}catch(err){try{targetWindow.focus();}catch(focusErr){}setStatus("Browser security blocked direct Target Window fill. Use the Bookmarklet in the Target Window.");}}catch(err){setStatus("Bookmarklet could not run. Use the Bookmarklet in the Target Window.");}})();`;
 
 function getProcessedCards() {
   try {
@@ -139,7 +142,7 @@ function renderGeneratedCard(card, box, status) {
 
     try {
       await navigator.clipboard.writeText(copyText);
-      status.innerHTML = "<span class='ok'>Copied:</span> " + copyText + "<br>Opening AnyCard popup...";
+      status.innerHTML = "<span class='ok'>Copied:</span> " + copyText + "<br>Opening AnyCard Target Window...";
     } catch (err) {
       status.textContent = "Copy failed. Manually copy this: " + copyText;
     }
@@ -154,15 +157,22 @@ function renderGeneratedCard(card, box, status) {
     const popupLeft = Math.max(0, Math.floor(parentLeft + parentWidth * 0.40));
     const popupTop = Math.max(0, Math.floor(parentTop + 20));
 
-    window.open(
+    const targetWindow = window.open(
       ANYCARD_URL,
-      "anycardLoadWindow",
+      TARGET_WINDOW_NAME,
       "width=" + popupWidth +
       ",height=" + popupHeight +
       ",left=" + popupLeft +
       ",top=" + popupTop +
       ",resizable=yes,scrollbars=yes"
     );
+
+    if (targetWindow) {
+      window.anycardTargetWindow = targetWindow;
+      status.innerHTML = status.innerHTML + "<br>Click the Bookmarklet in this AnyCard Window to try filling the Target Window.";
+    } else {
+      status.textContent = "Target Window was blocked. Allow popups, then click the Card Link again.";
+    }
   });
 
   box.appendChild(div);
