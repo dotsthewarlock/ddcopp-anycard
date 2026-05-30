@@ -143,6 +143,25 @@ If a required `CHANGELOG.md` entry is accidentally missed, acknowledge the miss 
 
 Do not over-document tiny internal changes. If no documentation updates are needed, state that briefly in the final report.
 
+## Long Chat and Handoff Hygiene
+
+When an AI chat becomes long, sluggish, repetitive, or likely to accumulate stale assumptions, proactively tell the user that the chat may benefit from a fresh session.
+
+This applies to Workflow AI, Dev AI, and Ideas AI.
+
+If the user agrees to start fresh, provide a concise handoff prompt before ending the current session.
+
+A handoff prompt should include:
+
+- the AI role being handed off to
+- the primary repository, if relevant
+- current source-of-truth files to review
+- current workflow rules or constraints that matter most
+- any active task, blocker, or pending follow-up
+- explicit instruction to perform Startup Sync before continuing
+
+Do not overuse this suggestion. Use it when the conversation length or context drift is likely to reduce productivity.
+
 ## Preference Learning
 
 When the user chooses FAST or REV after being asked, treat that as feedback.
