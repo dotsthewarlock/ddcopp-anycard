@@ -102,7 +102,7 @@ When the user does not specify FAST or REV:
 4. Explain the reason for considering REV.
 5. Ask:
 
-   “Proceed FAST anyway, or continue with REV?”
+   "Proceed FAST anyway, or continue with REV?"
 
 Do not spend significant time on REV analysis before asking.
 
@@ -143,6 +143,20 @@ If a required `CHANGELOG.md` entry is accidentally missed, acknowledge the miss 
 
 Do not over-document tiny internal changes. If no documentation updates are needed, state that briefly in the final report.
 
+## Response Outcome Notes
+
+For every substantive AnyCard response, include a concise outcome note near the top and near the bottom of the response.
+
+Each note should briefly say whether the user's request was completed, partially completed, blocked, failed, or still pending.
+
+Keep the notes short and practical so the user can quickly understand the result without extra clutter.
+
+When work is blocked or incomplete, briefly name the blocker or next required action.
+
+Very short conversational replies may omit these notes when an outcome note would add noise rather than clarity.
+
+This applies to Dev AI, Workflow AI, Ideas AI, and future AnyCard AI roles.
+
 ## Fresh Session Alert Criteria
 
 An AnyCard AI should suggest a fresh session when two or more of the following are true:
@@ -158,7 +172,7 @@ An AnyCard AI should suggest a fresh session when two or more of the following a
 
 Guidance:
 
-- Soft alert: approximately 75–100 messages or 3–5 completed implementation cycles
+- Soft alert: approximately 75-100 messages or 3-5 completed implementation cycles
 - Strong alert: approximately 150+ messages, significant context drift, or major workflow/documentation updates
 
 Chat length alone is not sufficient. The primary trigger is context health and risk of stale assumptions.
@@ -205,7 +219,7 @@ Use prior user decisions to better calibrate future mode selection:
 
 - If the user repeatedly approves FAST for similar changes, bias toward FAST next time.
 - If the user says a change should have been REV, bias toward REV for similar future changes.
-- Preserve the user’s preference for lower friction unless safety or project risk justifies REV.
+- Preserve the user's preference for lower friction unless safety or project risk justifies REV.
 
 Use prior user feedback about documentation updates to better decide when `CHANGELOG.md`, `PROJECT_HISTORY.md`, or `PROJECT_CONTEXT.md` should be updated.
 
@@ -239,8 +253,8 @@ When the user uses a generic or informal UI description, map it to the defined p
 At the start of the response, briefly state the mapping when it affects implementation clarity.
 
 Example:
-- “Mapping ‘textbox where I paste codes’ → Input Area.”
-- “Mapping ‘generated links’ → Generated Cards List.”
-- “Mapping ‘popup’ → Popup Window.”
+- "Mapping 'textbox where I paste codes' -> Input Area."
+- "Mapping 'generated links' -> Generated Cards List."
+- "Mapping 'popup' -> Popup Window."
 
 Keep this mapping feedback concise. Do not over-explain unless the mapping is ambiguous.
