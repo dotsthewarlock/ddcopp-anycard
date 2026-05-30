@@ -1,5 +1,5 @@
 :root {
-  --css-version: "V1.00.04";
+  --css-version: "V1.01.01";
 }
 
 body {
@@ -170,4 +170,75 @@ h3 {
 
 ol li {
   margin-bottom: 8px;
+}
+
+@media (max-width: 700px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .wrap {
+    display: block;
+    min-height: 100vh;
+    height: auto;
+    overflow: visible;
+  }
+
+  .left {
+    width: 100%;
+    min-height: auto;
+    height: auto;
+    padding: 16px;
+    border-right: 0;
+    border-bottom: 1px solid #374151;
+    overflow: visible;
+  }
+
+  .right {
+    padding: 16px;
+    overflow: visible;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  p,
+  li,
+  .small {
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  textarea,
+  button,
+  .bookmarklet-link {
+    font-size: 16px;
+  }
+
+  button,
+  .bookmarklet-link {
+    min-height: 44px;
+  }
+
+  #rawData {
+    height: 150px;
+  }
+
+  #linksContainer {
+    max-height: 280px;
+    flex: none;
+  }
+
+  .card {
+    font-size: 14px;
+  }
 }
