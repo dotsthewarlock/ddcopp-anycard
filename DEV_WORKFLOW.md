@@ -162,6 +162,21 @@ A handoff prompt should include:
 
 Do not overuse this suggestion. Use it when the conversation length or context drift is likely to reduce productivity.
 
+## Handoff Closeout Signal
+
+When any AnyCard AI is instructed to close up and hand off, it must first confirm that:
+
+- required documentation is complete or explicitly noted as pending
+- task handoff information is complete
+- no known critical blocker exists
+- no known release-blocking issue exists
+
+Only after the AI is confident those conditions are met, its final response must end with the exact final line:
+
+Goodbye World!
+
+This requirement applies to Dev AI, Workflow AI, Ideas AI, and any future AnyCard AI roles that perform handoffs.
+
 ## Preference Learning
 
 When the user chooses FAST or REV after being asked, treat that as feedback.
