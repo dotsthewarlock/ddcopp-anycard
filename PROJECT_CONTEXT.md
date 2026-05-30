@@ -1,73 +1,133 @@
 # PROJECT_CONTEXT
 
 ## Repository
+
 dotsthewarlock/ddcopp-anycard
 
 ## Live Site
+
 https://anycard.ddcopp.com/
 
 ## Stack
+
 - HTML
 - CSS
 - JavaScript
 
 ## Hosting
+
 GitHub Pages
 
 ## Domain
+
 - Registrar: Porkbun
 - DNS: Cloudflare
 
 ## Deployment Flow
-GitHub commit → GitHub Pages deployment → Cloudflare DNS → Live website
+
+GitHub commit → GitHub Pages deployment → Cloudflare DNS/cache → Live website
 
 ## Constraints
+
 - Static website
 - No React
 - No Next.js
 - No Node.js
 - No build process
 - No database
-- No backend (unless added later)
-Development workflow: Use DEV_WORKFLOW.md. The assistant may auto-select FAST or REV mode unless the user explicitly specifies a mode. Bias toward FAST for small low-risk AnyCard changes.
+- No backend unless explicitly added later
+- Preserve simple Chromebook/GitHub-first workflow
 
-Before starting implementation, perform a brief startup sync by reviewing PROJECT_CONTEXT.md and DEV_WORKFLOW.md. Use the current repository documentation as the source of truth over prior chat context or memory. This review should be brief and occur before deciding FAST vs REV or performing deeper analysis.
+## Development Workflow
+
+Use `DEV_WORKFLOW.md`.
+
+The assistant may auto-select FAST or REV mode unless the user explicitly specifies a mode.
+
+Bias toward FAST for small, low-risk AnyCard changes.
+
+Before implementation, perform a brief startup sync by reviewing:
+
+- `PROJECT_CONTEXT.md`
+- `DEV_WORKFLOW.md`
+
+Use current repository documentation as the source of truth over prior chat context or memory.
+
+The startup sync should be brief. Do not perform heavy REV analysis before confirming whether FAST or REV applies.
 
 ## Important Files
-- index.html
-- styles.css
-- app.js
+
+- `index.html`
+- `styles.css`
+- `app.js`
+- `DEV_WORKFLOW.md`
+- `PROJECT_HISTORY.md`
+- `PROJECT_HANDOFF.md`
+- `CHANGELOG.md`
 
 ## Notes
-Make the smallest safe changes possible. Preserve existing functionality unless explicitly modifying it.
+
+Make the smallest safe changes possible.
+
+Preserve existing functionality unless intentionally modifying it.
+
+For small requested changes, prefer implementation over extended discussion.
+
+Avoid unnecessary follow-up cycles.
 
 ## Versioning and Cache Busting
+
 HTML, CSS, and JavaScript each maintain independent version numbers.
 
-When the JavaScript version is incremented, the `app.js` cache-busting query string must also change so Cloudflare and browsers request the latest JavaScript immediately instead of serving a cached copy.
+Increment only files that change.
+
+When JavaScript changes:
+
+- update the JS version in `app.js`
+- update the JavaScript cache-busting version in `index.html`
+- ensure both values match
+- update `CHANGELOG.md`
+
+When CSS changes:
+
+- update the CSS version in `styles.css`
+- update the CSS cache-busting query string in `index.html`
+- update `CHANGELOG.md`
 
 Current workflow:
-- `index.html` defines the JavaScript cache-busting version used to load `app.js`.
+
+- `index.html` defines cache-busting versions used to load CSS and JS.
 - `app.js` displays its own JS version in the version box.
-- These values must match until a full single-source-of-truth version implementation is completed.
+- `styles.css` exposes its CSS version via `--css-version`.
+- Matching version/cache-busting values are required until a full single-source-of-truth version implementation is completed.
 
 ## Visibility
-Repository is public. Live website is public.
+
+Repository is public.
+
+Live website is public.
 
 ## Repository Documentation
 
-PROJECT_CONTEXT.md
-Current project facts, stack, deployment, and constraints.
+`PROJECT_CONTEXT.md`
 
-PROJECT_HISTORY.md
+Current project facts, stack, deployment, constraints, workflow, and repo-level instructions.
+
+`DEV_WORKFLOW.md`
+
+FAST/REV development workflow rules and mode-selection guidance.
+
+`PROJECT_HISTORY.md`
+
 Major decisions and project evolution.
 
-PROJECT_HANDOFF.md
+`PROJECT_HANDOFF.md`
+
 Original project handoff and startup discussion archive.
 
-CHANGELOG.md
-Chronological record of completed changes.
+`CHANGELOG.md`
 
+Chronological record of completed changes.
 
 ## Current Project Status
 
@@ -75,25 +135,34 @@ Project setup complete.
 
 Completed:
 
-* GitHub repository connected to ChatGPT.
-* Repository indexing enabled.
-* Development workflow established.
-* Documentation structure established.
-* Versioning policy established.
-* CHANGELOG.md created.
+- GitHub repository connected to ChatGPT
+- Repository indexing enabled
+- Development workflow established
+- FAST/REV workflow documented
+- Documentation structure established
+- Versioning policy established
+- Cache-busting policy established
+- `CHANGELOG.md` created
 
 Current Focus:
 
-* Improve usability and workflow efficiency.
-* Keep architecture simple.
-* Preserve static HTML/CSS/JS implementation.
-* Make small, safe, incremental improvements.
-* Avoid unnecessary complexity or framework adoption.
+- Improve usability and workflow efficiency
+- Keep architecture simple
+- Preserve static HTML/CSS/JS implementation
+- Make small, safe, incremental improvements
+- Avoid unnecessary complexity or framework adoption
+- Reduce avoidable AI/dev workflow back-and-forth
 
-Development Principles:
+## Development Principles
 
-* Analyze before coding.
-* Prefer the smallest safe change.
-* Update only affected file versions.
-* Maintain CHANGELOG.md.
-* Preserve working functionality unless intentionally modifying it.
+- Current repo documentation overrides stale chat context
+- Perform brief startup sync before implementation
+- Prefer the smallest safe change
+- Prefer FAST for small low-risk changes
+- Use REV only when risk, ambiguity, or structural impact justifies it
+- Update only affected file versions
+- Keep version numbers and cache-busting values synchronized
+- Maintain `CHANGELOG.md`
+- Preserve working functionality unless intentionally modifying it
+- Do not split mandatory release tasks into unnecessary follow-up cycles
+- Do not include unrelated refactors unless required for the requested change
