@@ -49,7 +49,7 @@ Current workflow:
 - These values must match until a full single-source-of-truth version implementation is completed.
 
 ## Visibility
-Repository is private. Live website is public.
+Repository is public. Live website is public.
 
 ## Repository Documentation
 
