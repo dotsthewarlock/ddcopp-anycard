@@ -1,8 +1,9 @@
-const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.04";
+const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.05";
 
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 const PROCESSED_CARDS_KEY = "anycard.processedCards.v1";
 const GENERATED_CARDS_KEY = "anycard.generatedCards.v1";
+const RAW_DATA_KEY = "anycard.rawData.v1";
 
 const BOOKMARKLET_CODE = `javascript:(async function(){try{if(location.origin+location.pathname!=="https://www.anycard.ca/swap/loadcard")return;var text=await navigator.clipboard.readText();var parts=text.trim().split(/\\s+/);if(parts.length<2)return;var cardInput=parts[0];var pinInput=parts[1];var cardField=document.querySelector('input[placeholder*="Card Number"]');var pinField=document.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField)return;cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event("input",{bubbles:true}));pinField.dispatchEvent(new Event("input",{bubbles:true}));setTimeout(function(){var btn=[...document.querySelectorAll("button,input[type='submit']")].find(function(el){return /submit card info/i.test(el.innerText||el.value||"")});if(btn)btn.click();},300);}catch(e){}})();`;
 
@@ -54,6 +55,22 @@ function getGeneratedCards() {
 function saveGeneratedCards(cards) {
   try {
     localStorage.setItem(GENERATED_CARDS_KEY, JSON.stringify(cards));
+  } catch (err) {
+    // Keep the workflow usable if localStorage is unavailable or full.
+  }
+}
+
+function getRawData() {
+  try {
+    return localStorage.getItem(RAW_DATA_KEY) || "";
+  } catch (err) {
+    return "";
+  }
+}
+
+function saveRawData(rawData) {
+  try {
+    localStorage.setItem(RAW_DATA_KEY, rawData);
   } catch (err) {
     // Keep the workflow usable if localStorage is unavailable or full.
   }
@@ -151,6 +168,14 @@ function restoreGeneratedCards(box, status) {
   status.textContent = cards.length + " cards restored.";
 }
 
+function restoreRawData(rawDataEl) {
+  const rawData = getRawData();
+
+  if (rawData) {
+    rawDataEl.value = rawData;
+  }
+}
+
 function updateVersionDisplay() {
   const jsVersionEl = document.getElementById("jsVersion");
   const cssVersionEl = document.getElementById("cssVersion");
@@ -190,14 +215,21 @@ function setupBookmarkletTools() {
 }
 
 function setupGenerator() {
+  const rawDataEl = document.getElementById("rawData");
   const box = document.getElementById("linksContainer");
   const status = document.getElementById("status");
 
+  restoreRawData(rawDataEl);
   restoreGeneratedCards(box, status);
 
-  document.getElementById("generateBtn").addEventListener("click", function () {
-    const raw = document.getElementById("rawData").value.trim();
+  rawDataEl.addEventListener("input", function () {
+    saveRawData(rawDataEl.value);
+  });
 
+  document.getElementById("generateBtn").addEventListener("click", function () {
+    const raw = rawDataEl.value.trim();
+
+    saveRawData(rawDataEl.value);
     box.innerHTML = "";
 
     if (!raw) {
