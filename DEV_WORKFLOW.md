@@ -106,6 +106,23 @@ When the user does not specify FAST or REV:
 
 Do not spend significant time on REV analysis before asking.
 
+## Release Completion Requirements
+
+Version and cache-busting alignment are blocking release requirements.
+
+When a changed file depends on a version/cache-busting reference for users to receive the current code, that reference must be updated in the same implementation pass.
+
+Examples:
+
+- If `app.js` changes, update the JS version in `app.js` and the `ANYCARD_JS_VERSION` cache-busting value in `index.html` in the same commit.
+- If `styles.css` changes, update `--css-version` in `styles.css` and the stylesheet cache-busting query string in `index.html` in the same commit.
+
+Do not treat version/cache-busting mismatches as deferrable documentation cleanup.
+
+Do not report an implementation as complete while a required version/cache-busting update is still pending.
+
+A missing `CHANGELOG.md` entry may be caught up in a later implementation commit when necessary, but a version/cache-busting mismatch must be fixed immediately.
+
 ## Documentation Check
 
 Every implementation should end with an internal documentation check.
