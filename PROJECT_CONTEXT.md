@@ -166,3 +166,48 @@ Current Focus:
 - Preserve working functionality unless intentionally modifying it
 - Do not split mandatory release tasks into unnecessary follow-up cycles
 - Do not include unrelated refactors unless required for the requested change
+
+
+## UI Terminology
+
+Use these names as the canonical project vocabulary. When the user refers to UI elements using generic descriptions, interpret them as the corresponding project terminology and use the project terminology in responses, documentation, and implementation discussions.
+
+### Input Area
+
+Large textarea where card/PIN pairs are pasted.
+
+### Generate Button
+
+Button that creates Card Links from Input Area content.
+
+### Generated Cards List
+
+Output section displaying generated Card Links.
+
+### Card Link
+
+Individual generated card entry.
+
+### AnyCard Window
+
+Main AnyCard application page.
+
+### Popup Window
+
+Child window opened from AnyCard during workflow.
+
+### Target Window
+
+Retailer/gift-card page used with the Bookmarklet workflow.
+
+### Bookmarklet
+
+Browser bookmarklet used to automate card entry.
+
+### Version Banner
+
+Visible application version display.
+
+### Status Message
+
+User-facing informational or validation message.
