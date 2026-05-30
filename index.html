@@ -18,7 +18,7 @@
 <div class="version-box">
   <div class="version-row">
     <span>HTML</span>
-    <span id="htmlVersion">V1.01.01</span>
+    <span id="htmlVersion">V1.01.02</span>
   </div>
   <div class="version-row">
     <span>JS</span>
@@ -42,7 +42,7 @@
       Generate Links
     </button>
 
-    <h3>Generated Items</h3>
+    <h3>Generated Cards</h3>
 
     <div id="linksContainer" class="small">
       No links yet.
@@ -91,7 +91,7 @@
     <ol>
       <li>Paste identifier + code data.</li>
       <li>Generate Links.</li>
-      <li>Click an item.</li>
+      <li>Click a generated card.</li>
       <li>The target page opens in a popup.</li>
       <li>Click bookmarklet.</li>
       <li>The form fills.</li>
@@ -108,8 +108,7 @@
 </div>
 
 <script>
-  const ANYCARD_JS_VERSION = "V1.01.01";
-  window.ANYCARD_JS_VERSION = ANYCARD_JS_VERSION;
+  const ANYCARD_JS_VERSION = "V1.00.03";
 
   const appScript = document.createElement("script");
   appScript.src = "app.js?v=" + encodeURIComponent(ANYCARD_JS_VERSION.replace(/^V/, ""));
