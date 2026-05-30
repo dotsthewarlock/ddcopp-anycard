@@ -72,7 +72,7 @@ function setupGenerator() {
       div.innerHTML =
   "<div class='card-line'>" +
     "<span class='card-code'>" + code + "</span>" +
-    "<span class='card-pin'>PIN: " + pin + "</span>" +
+    "<span class='card-pin'>" + pin + "</span>" +
   "</div>";
 
       div.addEventListener("click", async function () {
