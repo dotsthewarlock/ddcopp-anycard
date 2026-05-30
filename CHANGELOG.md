@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-05-30
+
+- Updated generated card row display to remove the visible right-hand value label and show only the value.
+
 ## 2026-05-29
 
 - Added project documentation files:
