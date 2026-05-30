@@ -1,4 +1,4 @@
-const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.02";
+const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.03";
 
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 const PROCESSED_CARDS_KEY = "anycard.processedCards.v1";
@@ -133,10 +133,15 @@ function setupGenerator() {
           status.textContent = "Copy failed. Manually copy this: " + copyText;
         }
 
-        const popupWidth = Math.floor(screen.width * 0.58);
-        const popupHeight = Math.floor(screen.height * 0.92);
-        const popupLeft = Math.floor(screen.width * 0.40);
-        const popupTop = 20;
+        const parentWidth = window.outerWidth || screen.availWidth;
+        const parentHeight = window.outerHeight || screen.availHeight;
+        const parentLeft = window.screenX || window.screenLeft || 0;
+        const parentTop = window.screenY || window.screenTop || 0;
+
+        const popupWidth = Math.max(420, Math.floor(parentWidth * 0.58));
+        const popupHeight = Math.max(640, Math.floor(parentHeight * 0.92));
+        const popupLeft = Math.max(0, Math.floor(parentLeft + parentWidth * 0.40));
+        const popupTop = Math.max(0, Math.floor(parentTop + 20));
 
         window.open(
           ANYCARD_URL,
