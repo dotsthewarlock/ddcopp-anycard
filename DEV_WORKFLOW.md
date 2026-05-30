@@ -150,3 +150,10 @@ AnyCard is intentionally simple:
 - no build process
 
 Do not treat every small edit like a large software project.
+
+
+### Terminology Rule
+
+When discussing UI, documentation, bugs, enhancements, acceptance criteria, verification steps, or implementation plans, use the defined project terminology from `PROJECT_CONTEXT.md`.
+
+If the user refers to an element using a generic description, map it to the appropriate project terminology and continue using the project terminology name.
