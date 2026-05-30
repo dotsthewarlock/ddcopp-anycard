@@ -21,3 +21,4 @@
 - Removed unused generated `anycard/` folder.
 - Connected ChatGPT to the GitHub repository for assisted development.
 - Confirmed project stack: static HTML, CSS, and JavaScript on GitHub Pages.
+
