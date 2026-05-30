@@ -157,3 +157,17 @@ Do not treat every small edit like a large software project.
 When discussing UI, documentation, bugs, enhancements, acceptance criteria, verification steps, or implementation plans, use the defined project terminology from `PROJECT_CONTEXT.md`.
 
 If the user refers to an element using a generic description, map it to the appropriate project terminology and continue using the project terminology name.
+
+
+### Terminology Mapping Feedback
+
+When the user uses a generic or informal UI description, map it to the defined project terminology from `PROJECT_CONTEXT.md`.
+
+At the start of the response, briefly state the mapping when it affects implementation clarity.
+
+Example:
+- “Mapping ‘textbox where I paste codes’ → Input Area.”
+- “Mapping ‘generated links’ → Generated Cards List.”
+- “Mapping ‘popup’ → Popup Window.”
+
+Keep this mapping feedback concise. Do not over-explain unless the mapping is ambiguous.
