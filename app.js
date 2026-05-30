@@ -1,8 +1,42 @@
-const JS_VERSION = "V1.00.03";
+const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.01";
 
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
+const PROCESSED_CARDS_KEY = "anycard.processedCards.v1";
 
 const BOOKMARKLET_CODE = `javascript:(async function(){try{var text=await navigator.clipboard.readText();var parts=text.trim().split(/\\s+/);if(parts.length<2)return;var cardInput=parts[0];var pinInput=parts[1];var cardField=document.querySelector('input[placeholder*="Card Number"]');var pinField=document.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField)return;cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event("input",{bubbles:true}));pinField.dispatchEvent(new Event("input",{bubbles:true}));setTimeout(function(){var btn=[...document.querySelectorAll("button,input[type='submit']")].find(function(el){return /submit card info/i.test(el.innerText||el.value||"")});if(btn)btn.click();},300);}catch(e){}})();`;
+
+function getProcessedCards() {
+  try {
+    const raw = localStorage.getItem(PROCESSED_CARDS_KEY);
+    if (!raw) return {};
+
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch (err) {
+    return {};
+  }
+}
+
+function saveProcessedCards(processedCards) {
+  try {
+    localStorage.setItem(PROCESSED_CARDS_KEY, JSON.stringify(processedCards));
+  } catch (err) {
+    // Keep the workflow usable if localStorage is unavailable or full.
+  }
+}
+
+function markCardProcessed(cardCode) {
+  const processedCards = getProcessedCards();
+  processedCards[cardCode] = {
+    processedAt: new Date().toISOString()
+  };
+  saveProcessedCards(processedCards);
+}
+
+function isCardProcessed(cardCode) {
+  const processedCards = getProcessedCards();
+  return Boolean(processedCards[cardCode]);
+}
 
 function updateVersionDisplay() {
   const jsVersionEl = document.getElementById("jsVersion");
@@ -69,14 +103,27 @@ function setupGenerator() {
 
       const div = document.createElement("div");
       div.className = "card";
-      div.innerHTML =
-  "<div class='card-line'>" +
-    "<span class='card-code'>" + code + "</span>" +
-    "<span class='card-pin'>" + pin + "</span>" +
-  "</div>";
+      if (isCardProcessed(code)) {
+        div.classList.add("clicked");
+      }
+
+      const cardLine = document.createElement("div");
+      cardLine.className = "card-line";
+
+      const cardCode = document.createElement("span");
+      cardCode.className = "card-code";
+      cardCode.textContent = code;
+
+      const cardPin = document.createElement("span");
+      cardPin.className = "card-pin";
+      cardPin.textContent = pin;
+
+      cardLine.appendChild(cardCode);
+      cardLine.appendChild(cardPin);
+      div.appendChild(cardLine);
 
       div.addEventListener("click", async function () {
-        document.querySelectorAll(".card").forEach(card => card.classList.remove("clicked"));
+        markCardProcessed(code);
         div.classList.add("clicked");
 
         try {
