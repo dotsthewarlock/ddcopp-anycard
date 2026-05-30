@@ -65,6 +65,16 @@ The startup sync should be brief. Do not perform heavy REV analysis before confi
 - `PROJECT_HANDOFF.md`
 - `CHANGELOG.md`
 
+## JavaScript File Policy
+
+AnyCard is intentionally a simple static site. JavaScript work should default to the existing `app.js` file.
+
+Do not create new JavaScript files unless the user explicitly authorizes it.
+
+If a new JavaScript file appears mission-critical, pause and request permission before creating it.
+
+If an unauthorized JavaScript helper file is created, the preferred correction is to fold useful logic back into `app.js` and remove the helper file.
+
 ## Notes
 
 Make the smallest safe changes possible.
@@ -119,98 +129,12 @@ FAST/REV development workflow rules and mode-selection guidance.
 
 `PROJECT_HISTORY.md`
 
-Major decisions and project evolution.
+Durable project decisions and long-term rationale.
 
 `PROJECT_HANDOFF.md`
 
-Original project handoff and startup discussion archive.
+Historical handoff notes. Verify against current code before trusting implementation status.
 
 `CHANGELOG.md`
 
-Chronological record of completed changes.
-
-## Current Project Status
-
-Project setup complete.
-
-Completed:
-
-- GitHub repository connected to ChatGPT
-- Repository indexing enabled
-- Development workflow established
-- FAST/REV workflow documented
-- Documentation structure established
-- Versioning policy established
-- Cache-busting policy established
-- `CHANGELOG.md` created
-
-Current Focus:
-
-- Improve usability and workflow efficiency
-- Keep architecture simple
-- Preserve static HTML/CSS/JS implementation
-- Make small, safe, incremental improvements
-- Avoid unnecessary complexity or framework adoption
-- Reduce avoidable AI/dev workflow back-and-forth
-
-## Development Principles
-
-- Current repo documentation overrides stale chat context
-- Perform brief startup sync before implementation
-- Prefer the smallest safe change
-- Prefer FAST for small low-risk changes
-- Use REV only when risk, ambiguity, or structural impact justifies it
-- Update only affected file versions
-- Keep version numbers and cache-busting values synchronized
-- Maintain `CHANGELOG.md`
-- Preserve working functionality unless intentionally modifying it
-- Do not split mandatory release tasks into unnecessary follow-up cycles
-- Do not include unrelated refactors unless required for the requested change
-
-
-## UI Terminology
-
-Use these names as the canonical project vocabulary. When the user refers to UI elements using generic descriptions, interpret them as the corresponding project terminology and use the project terminology in responses, documentation, and implementation discussions.
-
-### Input Area
-
-Large textarea where card/PIN pairs are pasted.
-
-### Generate Button
-
-Button that creates Card Links from Input Area content.
-
-### Generated Cards List
-
-Output section displaying generated Card Links.
-
-### Card Link
-
-Individual generated card entry.
-
-### AnyCard Window
-
-Main AnyCard application page.
-
-### Popup Window
-
-Child window opened from AnyCard during workflow.
-
-### Target Window
-
-Retailer/gift-card page used with the Bookmarklet workflow.
-
-### Bookmarklet
-
-Browser bookmarklet used to automate card entry.
-
-### Version Banner
-
-Visible application version display.
-
-### Status Message
-
-User-facing informational or validation message.
-
-
-When users refer to UI elements informally, AI should use the canonical term and briefly state the mapping when helpful, so the user can confirm the intended element.
+Release-relevant change history.
