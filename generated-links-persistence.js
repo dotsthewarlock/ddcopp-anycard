@@ -1,5 +1,6 @@
-const GENERATED_LINKS_VERSION = "V1.00.01";
+const GENERATED_LINKS_VERSION = "V1.00.02";
 const GENERATED_LINKS_KEY = "anycard.generatedLinks.v1";
+const RAW_INPUT_KEY = "anycard.rawInput.v1";
 
 function getStoredGeneratedLinks() {
   try {
@@ -21,6 +22,22 @@ function saveGeneratedLinks(items) {
   }
 }
 
+function getStoredRawInput() {
+  try {
+    return localStorage.getItem(RAW_INPUT_KEY) || "";
+  } catch (err) {
+    return "";
+  }
+}
+
+function saveRawInput(value) {
+  try {
+    localStorage.setItem(RAW_INPUT_KEY, value);
+  } catch (err) {
+    // Keep the page usable if storage is unavailable or full.
+  }
+}
+
 function readGeneratedLinksFromDom() {
   return Array.from(document.querySelectorAll("#linksContainer .card-line"))
     .map(function (line) {
@@ -36,9 +53,20 @@ function readGeneratedLinksFromDom() {
 function restoreGeneratedLinks() {
   const rawDataEl = document.getElementById("rawData");
   const generateBtn = document.getElementById("generateBtn");
+  const storedRawInput = getStoredRawInput();
   const storedItems = getStoredGeneratedLinks();
 
-  if (!rawDataEl || !generateBtn || !storedItems.length || rawDataEl.value.trim()) {
+  if (!rawDataEl || !generateBtn || rawDataEl.value.trim()) {
+    return;
+  }
+
+  if (storedRawInput) {
+    rawDataEl.value = storedRawInput;
+    generateBtn.click();
+    return;
+  }
+
+  if (!storedItems.length) {
     return;
   }
 
@@ -49,15 +77,21 @@ function restoreGeneratedLinks() {
     .join("\n");
 
   generateBtn.click();
-  rawDataEl.value = "";
 }
 
 function setupGeneratedLinksPersistence() {
+  const rawDataEl = document.getElementById("rawData");
   const generateBtn = document.getElementById("generateBtn");
 
-  if (!generateBtn) return;
+  if (!rawDataEl || !generateBtn) return;
+
+  rawDataEl.addEventListener("input", function () {
+    saveRawInput(rawDataEl.value);
+  });
 
   generateBtn.addEventListener("click", function () {
+    saveRawInput(rawDataEl.value);
+
     setTimeout(function () {
       const items = readGeneratedLinksFromDom();
       if (items.length) {
