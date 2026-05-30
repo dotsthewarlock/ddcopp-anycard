@@ -19,7 +19,7 @@
 <div class="version-box">
   <div class="version-row">
     <span>HTML</span>
-    <span id="htmlVersion">V1.01.09</span>
+    <span id="htmlVersion">V1.01.10</span>
   </div>
   <div class="version-row">
     <span>JS</span>
@@ -102,9 +102,10 @@
       <li>Paste identifier + code data.</li>
       <li>Generate Links.</li>
       <li>Click a generated card.</li>
-      <li>The target page opens in a popup.</li>
-      <li>Click bookmarklet.</li>
-      <li>The form fills.</li>
+      <li>The Target Window opens.</li>
+      <li>Return to this AnyCard Window.</li>
+      <li>Click the Bookmarklet.</li>
+      <li>If browser security blocks the fill, run the Bookmarklet in the Target Window.</li>
     </ol>
 
     <h3>Status</h3>
@@ -118,7 +119,7 @@
 </div>
 
 <script>
-  const ANYCARD_JS_VERSION = "V1.01.07";
+  const ANYCARD_JS_VERSION = "V1.01.08";
 
   const appScript = document.createElement("script");
   appScript.src = "app.js?v=" + encodeURIComponent(ANYCARD_JS_VERSION.replace(/^V/, ""));
