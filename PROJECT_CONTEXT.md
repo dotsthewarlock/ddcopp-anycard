@@ -31,6 +31,8 @@ GitHub commit → GitHub Pages deployment → Cloudflare DNS → Live website
 - No backend (unless added later)
 Development workflow: Use DEV_WORKFLOW.md. The assistant may auto-select FAST or REV mode unless the user explicitly specifies a mode. Bias toward FAST for small low-risk AnyCard changes.
 
+Before starting implementation, perform a brief startup sync by reviewing PROJECT_CONTEXT.md and DEV_WORKFLOW.md. Use the current repository documentation as the source of truth over prior chat context or memory. This review should be brief and occur before deciding FAST vs REV or performing deeper analysis.
+
 ## Important Files
 - index.html
 - styles.css
