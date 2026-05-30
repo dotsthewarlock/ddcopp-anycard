@@ -143,6 +143,26 @@ If a required `CHANGELOG.md` entry is accidentally missed, acknowledge the miss 
 
 Do not over-document tiny internal changes. If no documentation updates are needed, state that briefly in the final report.
 
+## Fresh Session Alert Criteria
+
+An AnyCard AI should suggest a fresh session when two or more of the following are true:
+
+- multiple implementation tasks or commit cycles have been completed in the current chat
+- the AI is relying on chat memory more than current repository documentation
+- stale assumptions, contradictions, or repeated corrections have occurred
+- the conversation has become long, sluggish, repetitive, or difficult to navigate
+- a workflow rule, documentation rule, or source-of-truth file changed during the current chat
+- the current task is complete and a substantially different task is about to begin
+- tool failures, recovery work, or context confusion have accumulated
+- unresolved follow-ups would benefit from a clean handoff
+
+Guidance:
+
+- Soft alert: approximately 75–100 messages or 3–5 completed implementation cycles
+- Strong alert: approximately 150+ messages, significant context drift, or major workflow/documentation updates
+
+Chat length alone is not sufficient. The primary trigger is context health and risk of stale assumptions.
+
 ## Long Chat and Handoff Hygiene
 
 When an AI chat becomes long, sluggish, repetitive, or likely to accumulate stale assumptions, proactively tell the user that the chat may benefit from a fresh session.
