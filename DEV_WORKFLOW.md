@@ -122,6 +122,8 @@ For FAST work, complete required changelog/history updates in the same pass when
 
 Do not create separate follow-up cycles for documentation that is required to complete the current change.
 
+If a required `CHANGELOG.md` entry is accidentally missed, acknowledge the miss and prefer catching it up in the next implementation commit instead of creating a changelog-only commit, unless the user explicitly asks for immediate correction.
+
 Do not over-document tiny internal changes. If no documentation updates are needed, state that briefly in the final report.
 
 ## Preference Learning
