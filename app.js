@@ -1,4 +1,4 @@
-const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.06";
+const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.07";
 
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 const PROCESSED_CARDS_KEY = "anycard.processedCards.v1";
@@ -277,7 +277,7 @@ function setupGenerator() {
   clearGeneratedLinksBtn.addEventListener("click", function () {
     clearGeneratedCards();
     box.textContent = "No cards generated yet.";
-    status.textContent = "Generated cards cleared. Completed card tracking was preserved.";
+    status.textContent = "Generated links cleared. Completed card tracking was preserved.";
   });
 }
 
