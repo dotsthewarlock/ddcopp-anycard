@@ -2,6 +2,8 @@
 
 ## 2026-05-30
 
+- Added JavaScript cache-busting in `index.html` so `app.js` is loaded with a versioned query string derived from the AnyCard JS version.
+- Documented the JavaScript cache-busting workflow in `PROJECT_CONTEXT.md`.
 - Updated generated card row display to remove the visible right-hand value label and show only the value.
 
 ## 2026-05-29
