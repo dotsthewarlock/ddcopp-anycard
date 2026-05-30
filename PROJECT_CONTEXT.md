@@ -40,3 +40,17 @@ Make the smallest safe changes possible. Preserve existing functionality unless 
 
 ## Visibility
 Repository is private. Live website is public.
+
+## Repository Documentation
+
+PROJECT_CONTEXT.md
+Current project facts, stack, deployment, and constraints.
+
+PROJECT_HISTORY.md
+Major decisions and project evolution.
+
+PROJECT_HANDOFF.md
+Original project handoff and startup discussion archive.
+
+CHANGELOG.md
+Chronological record of completed changes.
