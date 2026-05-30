@@ -2,6 +2,9 @@
 
 ## 2026-05-30
 
+- Added single-commit workflow guidance to `DEV_WORKFLOW.md`.
+- Established preference for batching related code, versioning, cache-busting, changelog, history, and release-completion updates into one commit whenever safe.
+- Added guidance to avoid unnecessary follow-up commit cycles and approval popups.
 - Added documentation-check workflow guidance to `DEV_WORKFLOW.md`.
 - Established documentation ownership rules:
   - AI may update `CHANGELOG.md` when changes are release-relevant.
@@ -21,4 +24,3 @@
 - Removed unused generated `anycard/` folder.
 - Connected ChatGPT to the GitHub repository for assisted development.
 - Confirmed project stack: static HTML, CSS, and JavaScript on GitHub Pages.
-
