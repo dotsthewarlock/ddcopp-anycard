@@ -1,4 +1,4 @@
-const JS_VERSION = "V1.00.02";
+const JS_VERSION = "V1.00.03";
 
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 
