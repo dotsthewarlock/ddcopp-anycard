@@ -211,3 +211,6 @@ Visible application version display.
 ### Status Message
 
 User-facing informational or validation message.
+
+
+When users refer to UI elements informally, AI should use the canonical term and briefly state the mapping when helpful, so the user can confirm the intended element.
