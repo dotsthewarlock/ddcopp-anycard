@@ -2,6 +2,11 @@
 
 ## 2026-05-30
 
+- Added Clear Raw Data utility button for clearing only persisted Input Area data.
+- Added Clear Generated Links utility button for clearing only persisted Generated Cards List data.
+- Preserved completed/green Card Link tracking by leaving `anycard.processedCards.v1` untouched when clearing generated links.
+- Polished utility-button layout so Generate Links remains visually primary while utility buttons use secondary styling, equal visual height, and non-wrapping text.
+- Restored `styles.css` readability after compressed formatting cleanup.
 - Added single-commit workflow guidance to `DEV_WORKFLOW.md`.
 - Established preference for batching related code, versioning, cache-busting, changelog, history, and release-completion updates into one commit whenever safe.
 - Added guidance to avoid unnecessary follow-up commit cycles and approval popups.
