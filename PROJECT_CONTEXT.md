@@ -38,6 +38,16 @@ GitHub commit → GitHub Pages deployment → Cloudflare DNS → Live website
 ## Notes
 Make the smallest safe changes possible. Preserve existing functionality unless explicitly modifying it.
 
+## Versioning and Cache Busting
+HTML, CSS, and JavaScript each maintain independent version numbers.
+
+When the JavaScript version is incremented, the `app.js` cache-busting query string must also change so Cloudflare and browsers request the latest JavaScript immediately instead of serving a cached copy.
+
+Current workflow:
+- `index.html` defines the JavaScript cache-busting version used to load `app.js`.
+- `app.js` displays its own JS version in the version box.
+- These values must match until a full single-source-of-truth version implementation is completed.
+
 ## Visibility
 Repository is private. Live website is public.
 
