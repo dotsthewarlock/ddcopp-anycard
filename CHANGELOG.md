@@ -2,6 +2,12 @@
 
 ## 2026-05-30
 
+- Added named Target Window support so Generated Card Links open and reuse `anycardTargetWindow`.
+- Updated the Bookmarklet workflow to attempt filling the Target Window from the original AnyCard Window before falling back to Target Window execution.
+- Added Status Message guidance when browser same-origin security blocks direct Target Window DOM access.
+- Confirmed generated-card persistence, Input Area persistence, and completed/green Card Link tracking behavior remain unchanged.
+- Aligned bookmarklet workflow instructions with the new Target Window behavior.
+- Aligned JavaScript versioning and cache-busting at `V1.01.08`.
 - Added Clear Raw Data utility button for clearing only persisted Input Area data.
 - Added Clear Generated Links utility button for clearing only persisted Generated Cards List data.
 - Preserved completed/green Card Link tracking by leaving `anycard.processedCards.v1` untouched when clearing generated links.
