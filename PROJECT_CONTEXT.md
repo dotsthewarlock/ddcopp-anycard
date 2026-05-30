@@ -37,3 +37,6 @@ GitHub commit → GitHub Pages deployment → Cloudflare DNS → Live website
 
 ## Notes
 Make the smallest safe changes possible. Preserve existing functionality unless explicitly modifying it.
+
+## Visibility
+Repository is private. Live website is public.
