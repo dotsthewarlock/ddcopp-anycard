@@ -51,11 +51,14 @@ FAST rules:
 6. Do not leave required versioning, cache-busting, or changelog work for a follow-up cycle.
 7. Bundle obvious required fixes, but do not include unrelated refactors or cleanup unless necessary.
 8. Do not create avoidable follow-up cycles.
-9. After implementation, report only:
-   - files changed
-   - what changed
-   - how to verify
-   - deployment risks, if any
+9. Prefer one complete commit per task. Batch related code, versioning, cache-busting, changelog, history, and required documentation updates into one commit whenever safe.
+10. Do not create separate commits for release tasks that belong to the same requested change.
+11. If a follow-up issue is discovered after implementation, do not immediately start another commit cycle unless it is urgent or blocking. Summarize the issue and ask whether to address it now or queue it for later.
+12. After implementation, report only:
+    - files changed
+    - what changed
+    - how to verify
+    - deployment risks, if any
 
 Default bias:
 
@@ -133,6 +136,8 @@ Use prior user decisions to better calibrate future mode selection:
 
 Use prior user feedback about documentation updates to better decide when `CHANGELOG.md`, `PROJECT_HISTORY.md`, or `PROJECT_CONTEXT.md` should be updated.
 
+Use prior user feedback about approval popups and commit delays to minimize unnecessary write cycles and favor complete batched commits.
+
 ## Project Bias
 
 AnyCard is intentionally simple:
@@ -145,4 +150,3 @@ AnyCard is intentionally simple:
 - no build process
 
 Do not treat every small edit like a large software project.
-
