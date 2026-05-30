@@ -103,6 +103,24 @@ When the user does not specify FAST or REV:
 
 Do not spend significant time on REV analysis before asking.
 
+## Documentation Check
+
+Every implementation should end with an internal documentation check.
+
+The assistant should decide whether each documentation file needs an update:
+
+- `CHANGELOG.md`: update when a change is user-visible, behavior-changing, release-relevant, or affects versions/cache-busting.
+- `PROJECT_HISTORY.md`: update when a durable decision, rationale, workflow choice, or tradeoff should be remembered by future AI/development sessions.
+- `PROJECT_CONTEXT.md`: do not change silently. If current project facts, constraints, architecture, hosting, or workflow rules should change, propose the change and ask the user for review/approval first.
+
+Documentation updates are part of release completion when they are required for the change.
+
+For FAST work, complete required changelog/history updates in the same pass when they are clearly needed.
+
+Do not create separate follow-up cycles for documentation that is required to complete the current change.
+
+Do not over-document tiny internal changes. If no documentation updates are needed, state that briefly in the final report.
+
 ## Preference Learning
 
 When the user chooses FAST or REV after being asked, treat that as feedback.
@@ -112,6 +130,8 @@ Use prior user decisions to better calibrate future mode selection:
 - If the user repeatedly approves FAST for similar changes, bias toward FAST next time.
 - If the user says a change should have been REV, bias toward REV for similar future changes.
 - Preserve the user’s preference for lower friction unless safety or project risk justifies REV.
+
+Use prior user feedback about documentation updates to better decide when `CHANGELOG.md`, `PROJECT_HISTORY.md`, or `PROJECT_CONTEXT.md` should be updated.
 
 ## Project Bias
 
