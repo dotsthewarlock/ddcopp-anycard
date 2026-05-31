@@ -209,6 +209,35 @@ A handoff prompt should include:
 
 Do not overuse this suggestion. Use it when the conversation length or context drift is likely to reduce productivity.
 
+## Handoff Command
+
+When the user says `handoff`, treat it as a formal request to close the current AI session and prepare a new AI instance.
+
+Before writing the handoff prompt, the current AI must:
+
+1. Identify whether any unfinished task is suitable for the next AI.
+2. Complete any unfinished work that is not suitable for the next AI, if it can be completed safely in the current session.
+3. Confirm required documentation is complete or explicitly identify documentation still pending.
+4. Confirm there is no known critical blocker.
+5. Confirm there is no known release-blocking issue.
+6. If blockers or unfinished work remain, state them clearly in the handoff.
+
+The handoff response must include a copy-ready prompt for the next AI.
+
+The handoff prompt should include:
+
+- next AI role and suggested chat name using the project naming convention
+- repository name
+- current source-of-truth files to review
+- instruction to perform Startup Sync before continuing
+- current workflow rules or constraints that matter most
+- active task, if any
+- open blockers, risks, or pending follow-ups
+- recent durable decisions that affect the next task
+- first recommended action for the next AI
+
+Use `handoff` as the preferred short command. Treat longer requests such as `prepare for handoff`, `close this AI`, or `start a new Workflow AI` as equivalent.
+
 ## Handoff Closeout Signal
 
 When any AnyCard AI is instructed to close up and hand off, it must first confirm that:
