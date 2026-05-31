@@ -1,4 +1,5 @@
-const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.11";
+const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.12";
+const BOOKMARKLET_VERSION = "AnyCard Fill v1.0";
 
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 const TARGET_WINDOW_NAME = "anycardTargetWindow";
@@ -8,7 +9,7 @@ const RAW_DATA_KEY = "anycard.rawData.v1";
 
 window.anycardTargetWindow = window.anycardTargetWindow || null;
 
-const BOOKMARKLET_CODE = `javascript:(async function(){var targetUrl="https://www.anycard.ca/swap/loadcard";var targetName="anycardTargetWindow";function setStatus(message){try{var status=document.getElementById("status");if(status)status.textContent=message;}catch(err){}}function isLoadCardPage(){return(location.origin+location.pathname).replace(/\/$/,"")===targetUrl;}if(isLoadCardPage()){try{const text=await navigator.clipboard.readText();const parts=text.trim().split(/\s+/);if(parts.length<2)return;const cardInput=parts[0];const pinInput=parts[1];const cardField=document.querySelector('input[placeholder*="Card Number"]');const pinField=document.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField)return;cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event('input',{bubbles:true}));pinField.dispatchEvent(new Event('input',{bubbles:true}));setTimeout(()=>{const btn=[...document.querySelectorAll('button,input[type="submit"]')].find(el=>/submit card info/i.test(el.innerText||el.value||''));if(btn) btn.click();},300);}catch(e){}return;}try{var targetWindow=window.open(targetUrl,targetName);if(targetWindow&&targetWindow.focus)targetWindow.focus();setStatus("AnyCard tab/window opened or focused. Switch to https://www.anycard.ca/swap/loadcard, then click this Bookmarklet from that page.");}catch(err){setStatus("Open https://www.anycard.ca/swap/loadcard, then click this Bookmarklet from that page.");}})();`;
+const BOOKMARKLET_CODE = `javascript:(async function(){try{const text=await navigator.clipboard.readText();const parts=text.trim().split(/\s+/);if(parts.length<2)return;const cardInput=parts[0];const pinInput=parts[1];const cardField=document.querySelector('input[placeholder*="Card Number"]');const pinField=document.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField)return;cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event('input',{bubbles:true}));pinField.dispatchEvent(new Event('input',{bubbles:true}));setTimeout(()=>{const btn=[...document.querySelectorAll('button,input[type="submit"]')].find(el=>/submit card info/i.test(el.innerText||el.value||''));if(btn) btn.click();},300);}catch(e){}})();`;
 
 function getProcessedCards() {
   try {
@@ -193,6 +194,7 @@ function restoreRawData(rawDataEl) {
 function updateVersionDisplay() {
   const jsVersionEl = document.getElementById("jsVersion");
   const cssVersionEl = document.getElementById("cssVersion");
+  const bookmarkletVersionEl = document.getElementById("bookmarkletVersion");
 
   if (jsVersionEl) {
     jsVersionEl.textContent = JS_VERSION;
@@ -206,6 +208,10 @@ function updateVersionDisplay() {
 
     cssVersionEl.textContent = cssVersion || "not found";
   }
+
+  if (bookmarkletVersionEl) {
+    bookmarkletVersionEl.textContent = BOOKMARKLET_VERSION;
+  }
 }
 
 function setupBookmarkletTools() {
@@ -215,13 +221,14 @@ function setupBookmarkletTools() {
 
   bookmarkletCodeBox.value = BOOKMARKLET_CODE;
   bookmarkletDragLink.href = BOOKMARKLET_CODE;
+  bookmarkletDragLink.textContent = BOOKMARKLET_VERSION;
 
   copyBookmarkletBtn.addEventListener("click", async function () {
     const status = document.getElementById("status");
 
     try {
       await navigator.clipboard.writeText(BOOKMARKLET_CODE);
-      status.textContent = "Bookmarklet code copied.";
+      status.textContent = "Bookmarklet code copied. Replace/reinstall the bookmarks bar item when the Bookmarklet version changes.";
     } catch (err) {
       status.textContent = "Copy failed. Select the bookmarklet text and copy manually.";
     }
