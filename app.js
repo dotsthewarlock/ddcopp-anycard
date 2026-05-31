@@ -1,5 +1,5 @@
-const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.14";
-const BOOKMARKLET_VERSION = "AnyCard Fill v1.2";
+const JS_VERSION = window.ANYCARD_JS_VERSION || "V1.01.15";
+const BOOKMARKLET_VERSION = "AnyCard Fill v1.3";
 
 const ANYCARD_URL = "https://www.anycard.ca/swap/loadcard";
 const TARGET_WINDOW_NAME = "anycardTargetWindow";
@@ -9,7 +9,7 @@ const RAW_DATA_KEY = "anycard.rawData.v1";
 
 window.anycardTargetWindow = window.anycardTargetWindow || null;
 
-const BOOKMARKLET_CODE = `javascript:(async function(){try{const targetUrl='https://www.anycard.ca/swap/loadcard';const targetName='anycardTargetWindow';if(window.location.origin+window.location.pathname!==targetUrl){const targetWindow=window.open(targetUrl,targetName);if(targetWindow){try{targetWindow.focus();}catch(e){}}return;}const text=await navigator.clipboard.readText();const parts=text.trim().split(/\\s+/);if(parts.length<2)return;const cardInput=parts[0];const pinInput=parts[1];const cardField=document.querySelector('input[placeholder*="Card Number"]');const pinField=document.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField)return;cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event('input',{bubbles:true}));pinField.dispatchEvent(new Event('input',{bubbles:true}));setTimeout(()=>{const btn=[...document.querySelectorAll('button,input[type="submit"]')].find(el=>/submit card info/i.test(el.innerText||el.value||''));if(btn) btn.click();},300);}catch(e){}})();`;
+const BOOKMARKLET_CODE = `javascript:(async function(){try{const url='https://www.anycard.ca/swap/loadcard';if(window.location.origin+window.location.pathname!==url){const targetWindow=window.open(url,"anycardTargetWindow");if(targetWindow){try{targetWindow.focus();}catch(e){}}return;}const text=await navigator.clipboard.readText();const parts=text.trim().split(/\s+/);if(parts.length<2)return;const cardInput=parts[0];const pinInput=parts[1];const cardField=document.querySelector('input[placeholder*="Card Number"]');const pinField=document.querySelector('input[placeholder*="Card PIN"]');if(!cardField||!pinField)return;cardField.value=cardInput.trim();pinField.value=pinInput.trim();cardField.dispatchEvent(new Event('input',{bubbles:true}));pinField.dispatchEvent(new Event('input',{bubbles:true}));setTimeout(()=>{const btn=[...document.querySelectorAll('button,input[type="submit"]')].find(el=>/submit card info/i.test(el.innerText||el.value||''));if(btn) btn.click();},300);}catch(e){}})();`;
 
 function getProcessedCards() {
   try {
