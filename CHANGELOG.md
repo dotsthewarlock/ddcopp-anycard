@@ -2,6 +2,11 @@
 
 ## 2026-05-30
 
+- Updated Card Link behavior to open/reuse `anycardTargetWindow` as a normal named browser tab/window rather than a popup-style window with sizing/position features.
+- Preserved card/PIN clipboard copy behavior, Generated Cards List behavior, and completed/green Card Link tracking.
+- Updated workflow instructions and Status Messages to direct users to run the Bookmarklet from the bookmarks bar while viewing `https://www.anycard.ca/swap/loadcard`.
+- Removed user-facing guidance implying direct cross-origin fill/submit from the AnyCard application window.
+- Aligned JavaScript versioning and cache-busting at `V1.01.09`.
 - Renamed utility action label from `Clear Generated Links` to `Clear Gen Links`.
 - Reduced the left panel from 340px to a more compact 300px while preserving side-by-side utility buttons.
 - Preserved equal 44px button height across Generate Links, Clear Raw Data, and Clear Gen Links.
