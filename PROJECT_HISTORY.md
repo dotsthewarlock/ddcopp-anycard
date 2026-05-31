@@ -19,6 +19,11 @@
   - `Dev AI# - <Feature or Implementation>`
   - `Ideas AI# - <Concept or Experiment>`
   - Numbering is never reused and improves traceability, auditing, and handoffs.
+- Adopted role-specific handoff convention.
+  - Workflow AI handoffs answer: "Where is the project?"
+  - Dev AI handoffs answer: "What implementation work remains?"
+  - Ideas AI handoffs answer: "What ideas should be explored next?"
+  - Handoff content should match the purpose of the receiving AI role.
 
 ## Features Implemented
 
