@@ -2,6 +2,15 @@
 
 ## 2026-05-30
 
+- Released `V1.01.16`.
+- Updated Bookmarklet to `AnyCard Fill v1.4`.
+- Fixed the Bookmarklet template-literal escaping so generated Bookmarklet output contains `split(/\s+/)` instead of the broken `split(/s+/)`.
+- Improved external loadcard page detection so the Bookmarklet treats the base path, trailing slash, query string, and hash variants as the loadcard page.
+- Preserved the original clipboard read, card/PIN split, field selectors, bubbling input events, delayed submit click, and Target Window open/focus behavior.
+- Confirmed Generated Card Link behavior remains unchanged.
+- Users must replace/reinstall the saved Bookmarklet after updating to this release.
+- Aligned JavaScript versioning and cache-busting at `V1.01.16`.
+
 - Released `V1.01.15`.
 - Updated Bookmarklet to `AnyCard Fill v1.3`.
 - Preserved the original known-good fill/submit workflow as the source of truth when executed on `https://www.anycard.ca/swap/loadcard`.
