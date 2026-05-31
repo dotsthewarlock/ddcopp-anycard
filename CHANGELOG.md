@@ -2,6 +2,14 @@
 
 ## 2026-05-30
 
+- Released `V1.01.14`.
+- Updated Bookmarklet to `AnyCard Fill v1.2`.
+- Bookmarklet now detects whether it is running on `https://www.anycard.ca/swap/loadcard`.
+- When run outside the external AnyCard page, the Bookmarklet opens/focuses the named Target Window (`anycardTargetWindow`) and exits without attempting cross-origin automation.
+- When run on the external AnyCard page, the original known-good fill/submit workflow is preserved.
+- Verified generated Bookmarklet output still contains `split(/\s+/)`.
+- Users must replace/reinstall the saved Bookmarklet after updating to this release.
+- Aligned JavaScript versioning and cache-busting at `V1.01.14`.
 - Released `V1.01.13`.
 - Fixed Bookmarklet regex escaping inside the JavaScript template literal.
 - The generated Bookmarklet now correctly contains `split(/\s+/)` instead of a malformed regex.
