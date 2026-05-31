@@ -24,6 +24,13 @@
   - Dev AI handoffs answer: "What implementation work remains?"
   - Ideas AI handoffs answer: "What ideas should be explored next?"
   - Handoff content should match the purpose of the receiving AI role.
+- Adopted timestamp cache-busting for CSS and JavaScript assets.
+  - `index.html` loads `styles.css` and `app.js` with a live timestamp query value on every page load.
+  - JS and CSS version numbers are informational only and no longer need to match cache-busting query strings.
+  - `index.html` should not be edited solely for JS or CSS cache-busting when `app.js` or `styles.css` changes.
+  - Rationale: AnyCard is a personal, low-traffic development project where reduced release friction is more valuable than long-lived browser caching for JS/CSS assets.
+  - Rationale: Timestamp cache-busting eliminates release errors caused by version/cache-busting mismatch between `app.js`, `styles.css`, and `index.html`.
+  - This preserves the static-site architecture and avoids introducing a build process.
 
 ## Features Implemented
 
