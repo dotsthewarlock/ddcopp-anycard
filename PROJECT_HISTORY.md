@@ -14,6 +14,11 @@
   - The project will continue using a Bookmarklet-first automation strategy.
   - Future work should focus on improving Bookmarklet reliability and user workflow rather than pursuing iframe workarounds.
   - Backend/proxy/API solutions are intentionally avoided unless an official supported integration path becomes available.
+- Adopted numbered AI workstream naming convention.
+  - `Workflow AI# - <Workstream>`
+  - `Dev AI# - <Feature or Implementation>`
+  - `Ideas AI# - <Concept or Experiment>`
+  - Numbering is never reused and improves traceability, auditing, and handoffs.
 
 ## Features Implemented
 
