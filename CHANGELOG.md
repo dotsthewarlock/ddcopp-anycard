@@ -2,6 +2,13 @@
 
 ## 2026-05-30
 
+- Migrated project governance to timestamp cache-busting for CSS and JavaScript assets.
+- `index.html` now serves as an asset loader using a live timestamp value rather than a manual JS/CSS cache-busting manifest.
+- JS and CSS version numbers are now informational only.
+- Eliminated the requirement for JS/CSS versions to match cache-busting query strings.
+- Reduced release friction for the personal low-traffic project.
+- Eliminated a class of release errors caused by version/cache-busting mismatches.
+
 - Released `V1.01.16`.
 - Updated Bookmarklet to `AnyCard Fill v1.4`.
 - Fixed the Bookmarklet template-literal escaping so generated Bookmarklet output contains `split(/\s+/)` instead of the broken `split(/s+/)`.
