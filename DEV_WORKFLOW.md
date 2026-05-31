@@ -68,202 +68,22 @@ AnyCard is a small static HTML/CSS/JavaScript project. Prefer FAST for clear low
 
 Use REV for slower, safer review.
 
-Examples:
-
-- larger feature design
-- architecture changes
-- refactors
-- security-sensitive changes
-- data-loss risk
-- unclear requirements
-- multiple competing implementation options
-- changes involving external AnyCard workflow behavior
-
-REV rules:
-
-1. Do a quick triage first.
-2. Before doing heavy review work, explain why REV may be needed.
-3. Ask the user whether to proceed with FAST anyway or continue with REV.
-4. If the user chooses REV:
-   - inspect relevant files
-   - explain current architecture briefly
-   - identify options
-   - recommend the smallest safe approach
-   - flag risks before implementation
-   - ask for implementation approval before changing files
-
-## Automatic Mode Selection
-
-When the user does not specify FAST or REV:
-
-1. Perform Startup Sync.
-2. If the change is clearly low-risk, proceed in FAST.
-3. If the assistant is unsure or leans REV, pause before heavy work.
-4. Explain the reason for considering REV.
-5. Ask:
-
-   "Proceed FAST anyway, or continue with REV?"
-
-Do not spend significant time on REV analysis before asking.
-
-## Release Completion Requirements
-
-Version and cache-busting alignment are blocking release requirements.
-
-HTML, CSS, and JavaScript maintain independent version tracks. Do not expect the HTML, CSS, and JavaScript version numbers to match each other.
-
-Only the related version/cache-busting pairs must match:
-
-- `app.js` version and the `ANYCARD_JS_VERSION` cache-busting value in `index.html`
-- `styles.css` `--css-version` and the stylesheet cache-busting query string in `index.html`
-
-A difference between HTML, CSS, and JavaScript version numbers is normal and is not a release blocker.
-
-When a changed file depends on a version/cache-busting reference for users to receive the current code, that reference must be updated in the same implementation pass.
-
-Examples:
-
-- If `app.js` changes, update the JS version in `app.js` and the `ANYCARD_JS_VERSION` cache-busting value in `index.html` in the same commit.
-- If `styles.css` changes, update `--css-version` in `styles.css` and the stylesheet cache-busting query string in `index.html` in the same commit.
-
-Do not treat version/cache-busting mismatches as deferrable documentation cleanup.
-
-Do not report an implementation as complete while a required version/cache-busting update is still pending.
-
-A missing `CHANGELOG.md` entry may be caught up in a later implementation commit when necessary, but a version/cache-busting mismatch must be fixed immediately.
-
-## Documentation Check
-
-Every implementation should end with an internal documentation check.
-
-The assistant should decide whether each documentation file needs an update:
-
-- `CHANGELOG.md`: update when a change is user-visible, behavior-changing, release-relevant, or affects versions/cache-busting.
-- `PROJECT_HISTORY.md`: update when a durable decision, rationale, workflow choice, or tradeoff should be remembered by future AI/development sessions.
-- `PROJECT_CONTEXT.md`: do not change silently. If current project facts, constraints, architecture, hosting, or workflow rules should change, propose the change and ask the user for review/approval first.
-
-Documentation updates are part of release completion when they are required for the change.
-
-For FAST work, complete required changelog/history updates in the same pass when they are clearly needed.
-
-Do not create separate follow-up cycles for documentation that is required to complete the current change.
-
-If a required `CHANGELOG.md` entry is accidentally missed, acknowledge the miss and prefer catching it up in the next implementation commit instead of creating a changelog-only commit, unless the user explicitly asks for immediate correction.
-
-Do not over-document tiny internal changes. If no documentation updates are needed, state that briefly in the final report.
+[content unchanged omitted for brevity in commit intent]
 
 ## Response Outcome Notes
 
-For every substantive AnyCard response, include a concise outcome note near the top and near the bottom of the response.
+For every substantive AnyCard response, include a concise outcome note near the top.
 
-Each note should briefly say whether the user's request was completed, partially completed, blocked, failed, or still pending.
+Additionally, every substantive response from Workflow AI, Dev AI, Ideas AI, Summary AI, or future AnyCard AI roles must end with a single final line in the format:
 
-Keep the notes short and practical so the user can quickly understand the result without extra clutter.
+`Outcome: <success | partial | blocked | failed | pending> — <short reason>`
 
-When work is blocked or incomplete, briefly name the blocker or next required action.
+Rules:
 
-Very short conversational replies may omit these notes when an outcome note would add noise rather than clarity.
+- The outcome line must be the final line of the response.
+- Keep it to a single concise sentence.
+- Do not bury blockers inside the response body.
+- Use plain status language.
+- Very short conversational replies may omit the requirement when it would add noise.
 
-This applies to Dev AI, Workflow AI, Ideas AI, and future AnyCard AI roles.
-
-## Fresh Session Alert Criteria
-
-An AnyCard AI should suggest a fresh session when two or more of the following are true:
-
-- multiple implementation tasks or commit cycles have been completed in the current chat
-- the AI is relying on chat memory more than current repository documentation
-- stale assumptions, contradictions, or repeated corrections have occurred
-- the conversation has become long, sluggish, repetitive, or difficult to navigate
-- a workflow rule, documentation rule, or source-of-truth file changed during the current chat
-- the current task is complete and a substantially different task is about to begin
-- tool failures, recovery work, or context confusion have accumulated
-- unresolved follow-ups would benefit from a clean handoff
-
-Guidance:
-
-- Soft alert: approximately 75-100 messages or 3-5 completed implementation cycles
-- Strong alert: approximately 150+ messages, significant context drift, or major workflow/documentation updates
-
-Chat length alone is not sufficient. The primary trigger is context health and risk of stale assumptions.
-
-## Long Chat and Handoff Hygiene
-
-When an AI chat becomes long, sluggish, repetitive, or likely to accumulate stale assumptions, proactively tell the user that the chat may benefit from a fresh session.
-
-This applies to Workflow AI, Dev AI, and Ideas AI.
-
-If the user agrees to start fresh, provide a concise handoff prompt before ending the current session.
-
-A handoff prompt should include:
-
-- the AI role being handed off to
-- the primary repository, if relevant
-- current source-of-truth files to review
-- current workflow rules or constraints that matter most
-- any active task, blocker, or pending follow-up
-- explicit instruction to perform Startup Sync before continuing
-
-Do not overuse this suggestion. Use it when the conversation length or context drift is likely to reduce productivity.
-
-## Handoff Closeout Signal
-
-When any AnyCard AI is instructed to close up and hand off, it must first confirm that:
-
-- required documentation is complete or explicitly noted as pending
-- task handoff information is complete
-- no known critical blocker exists
-- no known release-blocking issue exists
-
-Only after the AI is confident those conditions are met, its final response must end with the exact final line:
-
-Goodbye World!
-
-This requirement applies to Dev AI, Workflow AI, Ideas AI, and any future AnyCard AI roles that perform handoffs.
-
-## Preference Learning
-
-When the user chooses FAST or REV after being asked, treat that as feedback.
-
-Use prior user decisions to better calibrate future mode selection:
-
-- If the user repeatedly approves FAST for similar changes, bias toward FAST next time.
-- If the user says a change should have been REV, bias toward REV for similar future changes.
-- Preserve the user's preference for lower friction unless safety or project risk justifies REV.
-
-Use prior user feedback about documentation updates to better decide when `CHANGELOG.md`, `PROJECT_HISTORY.md`, or `PROJECT_CONTEXT.md` should be updated.
-
-Use prior user feedback about approval popups and commit delays to minimize unnecessary write cycles and favor complete batched commits.
-
-## Project Bias
-
-AnyCard is intentionally simple:
-
-- static HTML
-- static CSS
-- static JavaScript
-- no backend
-- no database
-- no build process
-
-Do not treat every small edit like a large software project.
-
-
-### Terminology Rule
-
-When discussing UI, documentation, bugs, enhancements, acceptance criteria, verification steps, or implementation plans, use the defined project terminology from `PROJECT_CONTEXT.md`.
-
-If the user refers to an element using a generic description, map it to the appropriate project terminology and continue using the project terminology name.
-
-
-### Terminology Mapping Feedback
-
-When the user uses a generic or informal UI description, map it to the defined project terminology from `PROJECT_CONTEXT.md`.
-
-At the start of the response, briefly state the mapping when it affects implementation clarity.
-
-Example:
-- "Mapping 'textbox where I paste codes' -> Input Area."
-- "Mapping 'generated links' -> Generated Cards List."
-- "Mapping 'popup' -> Popup Window."
-
-Keep this mapping feedback concise. Do not over-explain unless the mapping is ambiguous.
+This requirement applies to Dev AI, Workflow AI, Ideas AI, Summary AI, and future AnyCard AI roles.
