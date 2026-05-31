@@ -17,6 +17,98 @@ Use current repository documentation as the source of truth over prior chat cont
 
 This sync should be brief. Do not perform heavy analysis before deciding whether FAST or REV applies.
 
+## AI Chat Activation Protocol
+
+AnyCard development uses named AI chats to preserve role clarity, workstream continuity, and handoff quality.
+
+Activation applies when starting a new AnyCard AI chat from:
+
+- a formal `handoff`
+- a Workflow AI brief
+- an Ideas AI brief
+- a Dev AI implementation prompt
+- any other copy-ready prompt intended to start a new AnyCard AI session
+
+### Chat Naming Signal
+
+The copy-ready activation prompt should begin with the exact desired chat name as line 1.
+
+Examples:
+
+- `Workflow AI5 - Project Coordination`
+- `Dev AI5 - Bookmarklet Verification`
+- `Ideas AI3 - Popup Workflow Experiments`
+
+The prompt should then repeat:
+
+`Use this exact chat name if ChatGPT allows renaming: <chat name>`
+
+The role sentence should also repeat the same name:
+
+`You are <chat name> for AnyCard.`
+
+This does not guarantee ChatGPT's auto-title will preserve the name. Manual rename remains the reliable fallback when the generated chat title does not match the desired convention.
+
+### Activation Confirmation
+
+At the beginning of a new AnyCard AI chat, the AI should briefly confirm:
+
+- the role and intended chat name
+- whether it is acting as Workflow AI, Dev AI, Ideas AI, Summary AI, or another defined role
+- the source-of-truth files it will review
+- whether the current posture is discussion-only, FAST, REV, or pending mode selection
+
+This confirmation should be concise and should not replace Startup Sync.
+
+### Activation Startup Requirement
+
+After activation confirmation, the AI must perform Startup Sync before implementation or substantive project decisions.
+
+Repository documentation remains source of truth over:
+
+- prior chat memory
+- handoff summaries
+- copied prompts
+- assumptions from older AI sessions
+
+### Activation Prompt Shape
+
+A preferred activation prompt shape is:
+
+```text
+<Exact AI chat name>
+
+Use this exact chat name if ChatGPT allows renaming: <Exact AI chat name>
+
+You are <Exact AI chat name> for AnyCard.
+
+Repository:
+dotsthewarlock/ddcopp-anycard
+
+Perform Startup Sync first:
+1. Review PROJECT_CONTEXT.md
+2. Review DEV_WORKFLOW.md
+3. Review PROJECT_HISTORY.md, if relevant to the handoff or workstream
+
+Treat repository documentation as source of truth over chat memory.
+
+<role-specific context, active task, blockers, risks, and recommended next action>
+```
+
+### Governance Compliance Verification
+
+Governance checks should test actual response behavior, not only whether the AI can describe the rules.
+
+A useful harmless test is to ask for a substantive AnyCard project status update and verify that the response:
+
+- includes a concise summary or outcome note near the top
+- ends with exactly one final `Outcome: <status> — <reason>` line when the response is substantive
+- has nothing after the final `Outcome:` line
+- does not invent rules that conflict with repository documentation
+- treats repository documentation as source of truth over chat memory
+
+Avoid treating a simple "yes, I understand" governance answer as proof of compliance.
+
 ## Mode Keywords
 
 If the user starts a request with `FAST`, use FAST Mode unless the request is unsafe or clearly risky.
@@ -200,6 +292,9 @@ If the user agrees to start fresh, provide a concise handoff prompt before endin
 
 A handoff prompt should include:
 
+- the exact desired next chat name as line 1
+- instruction to use the exact chat name if ChatGPT allows renaming
+- the next AI role sentence using the same exact chat name
 - the AI role being handed off to
 - the primary repository, if relevant
 - current source-of-truth files to review
@@ -223,6 +318,16 @@ Before writing the handoff prompt, the current AI must:
 6. If blockers or unfinished work remain, state them clearly in the handoff.
 
 The handoff response must include a copy-ready prompt for the next AI.
+
+The copy-ready handoff prompt must begin with the exact recommended next chat name as line 1.
+
+The handoff prompt should repeat:
+
+`Use this exact chat name if ChatGPT allows renaming: <chat name>`
+
+The next AI role sentence should also use the same name:
+
+`You are <chat name> for AnyCard.`
 
 The handoff prompt should include:
 
