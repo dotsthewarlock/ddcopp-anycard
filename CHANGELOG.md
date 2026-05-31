@@ -2,6 +2,13 @@
 
 ## 2026-05-30
 
+- Released `V1.01.12`.
+- Restored the Bookmarklet displayed by AnyCard to the original known-good production implementation.
+- Removed cross-origin fill attempts from the supported workflow and reaffirmed the Bookmarklet-first architecture.
+- Added Bookmarklet-specific versioning with visible UI display (`AnyCard Fill v1.0`).
+- The drag-to-bookmarks-bar Bookmarklet label now reflects the Bookmarklet version/name.
+- Added user guidance that Bookmarklets must be replaced/reinstalled when the Bookmarklet version changes.
+- Aligned JavaScript versioning and cache-busting at `V1.01.12`.
 - Restored the active external-page Bookmarklet branch to use the original known-good fill/submit implementation body without added status handling, selector changes, or alternate logic inside the fill path.
 - Added tolerant loadcard-page detection while preserving the original clipboard read, field assignment, bubbling input events, and delayed submit behavior once running on the external page.
 - Users must reinstall/update their browser Bookmarklet after this release before testing.
