@@ -60,6 +60,40 @@ Architecture guidance:
 - Avoid backend, proxy, or API-based automation unless an official supported integration becomes available.
 - Preserve GitHub Pages compatibility and the static-site architecture.
 
+## AI Chat Naming Convention
+
+AnyCard development uses role-based AI chat separation.
+
+Chat types:
+
+- Workflow AI
+- Dev AI
+- Ideas AI
+
+Naming format:
+
+- `Workflow AI# - <Workstream>`
+- `Dev AI# - <Feature or Implementation>`
+- `Ideas AI# - <Concept or Experiment>`
+
+Rules:
+
+- Numbers increment only when a new AI chat instance is created.
+- Numbers are never reused.
+- Retired chats retain their original number.
+- Continue using an existing chat when work remains part of the same active workstream.
+- Create a new numbered chat when starting a new implementation, workflow, or ideation stream.
+- New Dev AI chats should always begin with `Dev AI# -`.
+- New Workflow AI chats should always begin with `Workflow AI# -`.
+- New Ideas AI chats should always begin with `Ideas AI# -`.
+
+Purpose:
+
+- Improve traceability of decisions.
+- Simplify implementation audits.
+- Improve handoffs between Workflow AI and Dev AI.
+- Reduce confusion caused by unnamed or reused chats.
+
 ## Development Workflow
 
 Use `DEV_WORKFLOW.md`.
