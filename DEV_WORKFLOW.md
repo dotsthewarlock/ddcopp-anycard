@@ -137,13 +137,12 @@ FAST rules:
 3. Do not ask for approval unless there is a real blocker, ambiguity, deployment risk, or data-loss risk.
 4. Make the smallest safe change.
 5. Complete mandatory release tasks in the same pass:
-   - affected file version bump
-   - cache-busting update
+   - affected informational file version bump, when applicable
    - `CHANGELOG.md` update, when applicable
-6. Do not leave required versioning, cache-busting, or changelog work for a follow-up cycle.
+6. Do not leave required versioning or changelog work for a follow-up cycle.
 7. Bundle obvious required fixes, but do not include unrelated refactors or cleanup unless necessary.
 8. Do not create avoidable follow-up cycles.
-9. Prefer one complete commit per task. Batch related code, versioning, cache-busting, changelog, history, and required documentation updates into one commit whenever safe.
+9. Prefer one complete commit per task. Batch related code, versioning, changelog, history, and required documentation updates into one commit whenever safe.
 10. Do not create separate commits for release tasks that belong to the same requested change.
 11. If a follow-up issue is discovered after implementation, do not immediately start another commit cycle unless it is urgent or blocking. Summarize the issue and ask whether to address it now or queue it for later.
 12. After implementation, report only:
@@ -200,29 +199,36 @@ Do not spend significant time on REV analysis before asking.
 
 ## Release Completion Requirements
 
-Version and cache-busting alignment are blocking release requirements.
+HTML, CSS, and JavaScript maintain independent informational version tracks. Do not expect the HTML, CSS, and JavaScript version numbers to match each other.
 
-HTML, CSS, and JavaScript maintain independent version tracks. Do not expect the HTML, CSS, and JavaScript version numbers to match each other.
+`index.html` uses live timestamp cache-busting for `styles.css` and `app.js` on every page load.
 
-Only the related version/cache-busting pairs must match:
+Timestamp cache-busting means:
 
-- `app.js` version and the `ANYCARD_JS_VERSION` cache-busting value in `index.html`
-- `styles.css` `--css-version` and the stylesheet cache-busting query string in `index.html`
+- CSS and JavaScript asset URLs are refreshed automatically on every page load.
+- JS and CSS version numbers are informational only.
+- JS and CSS version numbers do not need to match cache-busting query strings.
+- `index.html` is the asset loader, not a manual JS/CSS version manifest.
+- Do not edit `index.html` solely to update JS or CSS cache-busting values.
 
-A difference between HTML, CSS, and JavaScript version numbers is normal and is not a release blocker.
+When JavaScript changes:
 
-When a changed file depends on a version/cache-busting reference for users to receive the current code, that reference must be updated in the same implementation pass.
+- update the JS version in `app.js`
+- update `CHANGELOG.md` when the change is user-visible, behavior-changing, or release-relevant
+- do not update `index.html` solely for JS cache-busting
 
-Examples:
+When CSS changes:
 
-- If `app.js` changes, update the JS version in `app.js` and the `ANYCARD_JS_VERSION` cache-busting value in `index.html` in the same commit.
-- If `styles.css` changes, update `--css-version` in `styles.css` and the stylesheet cache-busting query string in `index.html` in the same commit.
+- update the CSS version in `styles.css`
+- update `CHANGELOG.md` when the change is user-visible, behavior-changing, or release-relevant
+- do not update `index.html` solely for CSS cache-busting
 
-Do not treat version/cache-busting mismatches as deferrable documentation cleanup.
+When HTML or loader behavior changes:
 
-Do not report an implementation as complete while a required version/cache-busting update is still pending.
+- update the HTML version displayed in `index.html`
+- update `CHANGELOG.md` when the change is user-visible, behavior-changing, or release-relevant
 
-A missing `CHANGELOG.md` entry may be caught up in a later implementation commit when necessary, but a version/cache-busting mismatch must be fixed immediately.
+Do not report an implementation as incomplete or release-blocked solely because a JS/CSS informational version number differs from an `index.html` cache-busting query value.
 
 ## Documentation Check
 
@@ -230,7 +236,7 @@ Every implementation should end with an internal documentation check.
 
 The assistant should decide whether each documentation file needs an update:
 
-- `CHANGELOG.md`: update when a change is user-visible, behavior-changing, release-relevant, or affects versions/cache-busting.
+- `CHANGELOG.md`: update when a change is user-visible, behavior-changing, release-relevant, or affects versioning/cache-busting policy.
 - `PROJECT_HISTORY.md`: update when a durable decision, rationale, workflow choice, or tradeoff should be remembered by future AI/development sessions.
 - `PROJECT_CONTEXT.md`: do not change silently. If current project facts, constraints, architecture, hosting, or workflow rules should change, propose the change and ask the user for review/approval first.
 
