@@ -38,6 +38,28 @@ GitHub commit → GitHub Pages deployment → Cloudflare DNS/cache → Live webs
 - No backend unless explicitly added later
 - Preserve simple Chromebook/GitHub-first workflow
 
+## External Site Integration
+
+AnyCard interacts with the external AnyCard loadcard workflow hosted on `www.anycard.ca`.
+
+Current automation strategy:
+
+- AnyCard opens the external loadcard page in a Popup Window / Target Window.
+- Automation is performed through a Bookmarklet that executes within the external page context.
+- The Bookmarklet is the primary supported automation mechanism.
+
+Browser constraints:
+
+- The external AnyCard page cannot be assumed to be embeddable in an iframe.
+- Browser same-origin security restrictions prevent direct DOM manipulation of `www.anycard.ca` from `anycard.ddcopp.com`.
+- Automation that interacts with the external page must execute within the external page context.
+
+Architecture guidance:
+
+- Prefer improving the Bookmarklet workflow rather than pursuing iframe-based solutions.
+- Avoid backend, proxy, or API-based automation unless an official supported integration becomes available.
+- Preserve GitHub Pages compatibility and the static-site architecture.
+
 ## Development Workflow
 
 Use `DEV_WORKFLOW.md`.
