@@ -2,6 +2,15 @@
 
 ## 2026-05-30
 
+- Released `V1.01.15`.
+- Updated Bookmarklet to `AnyCard Fill v1.3`.
+- Preserved the original known-good fill/submit workflow as the source of truth when executed on `https://www.anycard.ca/swap/loadcard`.
+- Outside the external AnyCard page, the Bookmarklet now strictly opens/reuses `anycardTargetWindow`, attempts focus, and exits without cross-origin automation.
+- Verified generated Bookmarklet output contains `split(/\s+/)`.
+- Drag Bookmarklet, textarea Bookmarklet, and copied Bookmarklet all originate from the same `BOOKMARKLET_CODE` source.
+- Users must replace/reinstall the saved Bookmarklet after updating to this release.
+- Aligned JavaScript versioning and cache-busting at `V1.01.15`.
+
 - Released `V1.01.14`.
 - Updated Bookmarklet to `AnyCard Fill v1.2`.
 - Bookmarklet now detects whether it is running on `https://www.anycard.ca/swap/loadcard`.
@@ -10,20 +19,6 @@
 - Verified generated Bookmarklet output still contains `split(/\s+/)`.
 - Users must replace/reinstall the saved Bookmarklet after updating to this release.
 - Aligned JavaScript versioning and cache-busting at `V1.01.14`.
-- Released `V1.01.13`.
-- Fixed Bookmarklet regex escaping inside the JavaScript template literal.
-- The generated Bookmarklet now correctly contains `split(/\s+/)` instead of a malformed regex.
-- Preserved the original known-good Bookmarklet behavior, selectors, input events, and delayed submit logic.
-- Updated Bookmarklet version to `AnyCard Fill v1.1`.
-- Users must replace/reinstall the saved Bookmarklet after updating to this release.
-- Aligned JavaScript versioning and cache-busting at `V1.01.13`.
-- Released `V1.01.12`.
-- Restored the Bookmarklet displayed by AnyCard to the original known-good production implementation.
-- Removed cross-origin fill attempts from the supported workflow and reaffirmed the Bookmarklet-first architecture.
-- Added Bookmarklet-specific versioning with visible UI display (`AnyCard Fill v1.0`).
-- The drag-to-bookmarks-bar Bookmarklet label now reflects the Bookmarklet version/name.
-- Added user guidance that Bookmarklets must be replaced/reinstalled when the Bookmarklet version changes.
-- Aligned JavaScript versioning and cache-busting at `V1.01.12`.
 
 ## 2026-05-29
 
