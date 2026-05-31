@@ -148,7 +148,7 @@ FAST rules:
 12. After implementation, report only:
     - files changed
     - what changed
-    - how to verify
+    - how to verify, including a clickable cache-busted live-site verification link when live verification is relevant
     - deployment risks, if any
 
 Default bias:
@@ -229,6 +229,22 @@ When HTML or loader behavior changes:
 - update `CHANGELOG.md` when the change is user-visible, behavior-changing, or release-relevant
 
 Do not report an implementation as incomplete or release-blocked solely because a JS/CSS informational version number differs from an `index.html` cache-busting query value.
+
+## Live Verification Links
+
+When reporting a completed implementation that should be checked on the live GitHub Pages site, Dev AI must include a clickable Markdown cache-busted verification link.
+
+Use this format:
+
+`[Open cache-busted live site](https://anycard.ddcopp.com/?cacheBust=<timestamp>)`
+
+Requirements:
+
+- The link text must be clickable in the chat response.
+- The URL must point to the live GitHub Pages site at `https://anycard.ddcopp.com/`.
+- The URL must include a fresh query string such as `?cacheBust=<timestamp>` so the HTML request is also cache-busted.
+- Do not rely on a plain-text, non-clickable URL when asking the user to verify a deployed change.
+- For documentation-only changes that do not require live-site verification, a clickable cache-busted live-site link is optional.
 
 ## Documentation Check
 
