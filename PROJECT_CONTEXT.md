@@ -143,29 +143,35 @@ Avoid unnecessary follow-up cycles.
 
 ## Versioning and Cache Busting
 
-HTML, CSS, and JavaScript each maintain independent version numbers.
+HTML, CSS, and JavaScript each maintain independent informational version numbers.
 
 Increment only files that change.
+
+Current workflow:
+
+- `index.html` is the asset loader.
+- `index.html` uses a live timestamp cache-busting value for `styles.css` and `app.js`.
+- Each page load requests fresh CSS and JavaScript asset URLs.
+- `app.js` displays its own informational JS version in the version box.
+- `styles.css` exposes its informational CSS version via `--css-version`.
+- JS/CSS version numbers no longer need to match cache-busting query strings.
 
 When JavaScript changes:
 
 - update the JS version in `app.js`
-- update the JavaScript cache-busting version in `index.html`
-- ensure both values match
-- update `CHANGELOG.md`
+- update `CHANGELOG.md` when the change is user-visible, behavior-changing, or release-relevant
+- do not update `index.html` solely for JS cache-busting
 
 When CSS changes:
 
 - update the CSS version in `styles.css`
-- update the CSS cache-busting query string in `index.html`
-- update `CHANGELOG.md`
+- update `CHANGELOG.md` when the change is user-visible, behavior-changing, or release-relevant
+- do not update `index.html` solely for CSS cache-busting
 
-Current workflow:
+When HTML or loader behavior changes:
 
-- `index.html` defines cache-busting versions used to load CSS and JS.
-- `app.js` displays its own JS version in the version box.
-- `styles.css` exposes its CSS version via `--css-version`.
-- Matching version/cache-busting values are required until a full single-source-of-truth version implementation is completed.
+- update the HTML version displayed in `index.html`
+- update `CHANGELOG.md` when the change is user-visible, behavior-changing, or release-relevant
 
 ## Visibility
 
