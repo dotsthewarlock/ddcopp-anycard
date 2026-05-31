@@ -238,6 +238,57 @@ The handoff prompt should include:
 
 Use `handoff` as the preferred short command. Treat longer requests such as `prepare for handoff`, `close this AI`, or `start a new Workflow AI` as equivalent.
 
+### Role-Specific Handoff Focus
+
+Workflow AI handoff answers: "Where is the project?"
+
+Workflow AI handoffs should focus on:
+
+- project status
+- durable decisions
+- active workstreams
+- priorities
+- governance or workflow changes
+- open risks
+- recommended next AI roles or sessions
+
+Workflow AI handoffs should avoid centering the handoff around a single implementation bug unless that bug is release-blocking.
+
+Dev AI handoff answers: "What implementation work remains?"
+
+Dev AI handoffs should focus on:
+
+- files changed or likely to change
+- implementation state
+- acceptance criteria
+- verification status
+- blockers
+- version/cache state
+- release risks
+- recommended next implementation step
+
+Dev AI handoffs should avoid broad product discussion or unrelated workstreams.
+
+Ideas AI handoff answers: "What ideas should be explored next?"
+
+Ideas AI handoffs should focus on:
+
+- concepts explored
+- concepts rejected
+- concepts deferred
+- promising opportunities
+- assumptions needing validation
+- open product, workflow, or UX questions
+- recommended next experiments or Dev AI briefs
+
+Ideas AI handoffs should avoid code-level debugging, commit history, and detailed release/versioning information unless directly relevant to the idea being handed off.
+
+When choosing the next AI role, match the handoff content to the next AI purpose:
+
+- Use Workflow AI for governance, project state, prioritization, and coordination.
+- Use Dev AI for implementation, debugging, verification, and release work.
+- Use Ideas AI for exploration, product concepts, UX options, and experiments.
+
 ## Handoff Closeout Signal
 
 When any AnyCard AI is instructed to close up and hand off, it must first confirm that:
