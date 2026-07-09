@@ -7,6 +7,7 @@
     R = "20px",
     C = "courtesy of DotsTheWarlock",
     W = 400,
+    CD = 1200,
     D = m => new Promise(r => setTimeout(r, m)),
     Q = () => document.querySelector("#target_codes > div > div > div.position-relative > div > div > div > div.serial-number_wrapper.flex-grow-1 > input"),
     N = () => document.querySelector(".step_active div.text-center.mt-2>input"),
@@ -20,10 +21,17 @@
       return vis && (big || src.includes("bframe") || t.includes("challenge"));
     }),
     U = o => {
-      let b = document.getElementById("bs_email_btn");
+      let b = document.getElementById("bs_email_btn"),
+        c = document.getElementById("bs_clip_btn");
       if (b) {
         b.textContent = o ? "⏸" : "▶";
         b.title = o ? "Stop running action" : "Click to run next action";
+        b.disabled = false;
+        b.style.opacity = o ? ".85" : "1";
+      }
+      if (c) {
+        c.disabled = !!o;
+        c.style.opacity = o ? ".5" : "1";
       }
     },
     P = s => {
@@ -58,8 +66,10 @@
     T = () => {
       window._bsStop = 1;
       window._bsBusy = 0;
+      window._bsCool = 1;
       U(0);
       S("Stopped");
+      setTimeout(() => window._bsCool = 0, CD);
     },
     G = async () => {
       if (window._bsStop || document.getElementById("bs_clip_btn")?.dataset.on !== "1" || !navigator.clipboard) return "";
@@ -101,7 +111,8 @@
       return 1;
     },
     A = async () => {
-      if (window._bsBusy) return T();
+      if (window._bsBusy) return S("Already running");
+      if (window._bsCool) return S("Please wait");
       if (X()) return S("Try again later");
 
       window._bsBusy = 1;
@@ -186,11 +197,11 @@
         }, W);
       } finally {
         setTimeout(() => {
-          if (window._bsBusy) {
-            window._bsBusy = 0;
-            U(0);
-          }
-        }, 800);
+          window._bsBusy = 0;
+          window._bsCool = 1;
+          U(0);
+          setTimeout(() => window._bsCool = 0, CD);
+        }, CD);
       }
     },
     E = () => {
@@ -274,6 +285,7 @@
         };
 
         cb.onclick = () => {
+          if (window._bsBusy || window._bsCool) return S("Already running");
           let on = cb.dataset.on !== "1";
           set(on);
           S(on ? "Paste barcode ON" : "Paste barcode OFF");
