@@ -13,14 +13,14 @@
     bar = s => (s || "").match(/\b\d{30}\b/)?.[0] || "",
     Q = () => q("#target_codes > div > div > div.position-relative > div > div > div > div.serial-number_wrapper.flex-grow-1 > input"),
     N = () => q(".step_active div.text-center.mt-2>input"),
-    F = (e, ...a) => a.forEach(x => e.dispatchEvent(new Event(x, { bubbles: true }))),
+    F = (e, ...a) => a.forEach(x => e.dispatchEvent(new Event(x, { bubbles: 1 }))),
     Ent = e => ["keydown", "keypress", "keyup"].forEach(x =>
       e.dispatchEvent(new KeyboardEvent(x, {
         key: "Enter",
         code: "Enter",
         keyCode: 13,
         which: 13,
-        bubbles: true
+        bubbles: 1
       }))
     ),
     X = () => qa('iframe[src*="recaptcha"],iframe[src*="captcha"],.g-recaptcha,[class*="captcha"]').find(e => {
@@ -38,23 +38,32 @@
           s.visibility !== "hidden" &&
           s.opacity !== "0";
 
-      return v && (r.width > 250 && r.height > 120 || u.includes("bframe") || t.includes("challenge"));
+      return v && (
+        r.width > 250 && r.height > 120 ||
+        u.includes("bframe") ||
+        t.includes("challenge")
+      );
     }),
+
     U = o => {
       let b = q("#bsa");
+
       if (b) {
         b.textContent = o ? "⏸" : "▶";
         b.title = o ? "Stop running action" : "Click to run next action";
       }
     },
+
     S = (m = C) => {
       let b = q("#bst");
-      if (b) {
-        b.textContent = m;
-        clearTimeout(b._t);
-        if (m !== C) b._t = setTimeout(() => S(), 4000);
-      }
+
+      b && (
+        b.textContent = m,
+        clearTimeout(b._t),
+        m !== C && (b._t = setTimeout(() => S(), 4e3))
+      );
     },
+
     T = () => {
       window._bsStop = 1;
       window._bsBusy = 0;
@@ -63,6 +72,7 @@
       S("Stopped");
       setTimeout(() => window._bsCool = 0, CD);
     },
+
     G = async () => {
       if (window._bsStop || q("#bsc")?.dataset.on !== "1" || !navigator.clipboard) return "";
 
@@ -73,13 +83,16 @@
         return "";
       }
     },
+
     J = async sn => {
       let c, n;
 
       for (let k = 0; k < 20 && !window._bsStop; k++) {
         c = Q();
         n = N();
+
         if (c && n) break;
+
         await D(120);
       }
 
@@ -98,6 +111,7 @@
       S('"Next" unavailable');
       return 1;
     },
+
     A = async () => {
       if (window._bsBusy || window._bsCool) return S("Please wait");
       if (X()) return S("Try again later");
@@ -142,7 +156,7 @@
         let t = q("#workflow_data_terms_of_service");
 
         if (t && !t.checked) {
-          t.checked = true;
+          t.checked = 1;
           F(t, "change");
         }
 
@@ -160,7 +174,7 @@
             x = r.left + r.width / 2,
             y = r.top + r.height / 2;
 
-          if (!r.width || !r.height || x < 0 || y < 0 || x > innerWidth || y > innerHeight) return false;
+          if (!r.width || !r.height || x < 0 || y < 0 || x > innerWidth || y > innerHeight) return 0;
 
           let top = document.elementFromPoint(x, y),
             txt = e.textContent.toUpperCase().trim(),
@@ -196,6 +210,7 @@
         }, CD);
       }
     },
+
     E = () => {
       q("#bs_email_wrap")?.remove();
 
@@ -210,27 +225,20 @@
       document.body.appendChild(Object.assign(document.createElement("style"), {
         id: "bss",
         textContent: `
-#bsp{position:fixed;top:20px;right:20px;width:360px;z-index:900000}
+#bsp{--bg:${BG};position:fixed;top:20px;right:20px;width:360px;z-index:900000}
 #bsw{display:flex;gap:6px;align-items:stretch}
-#bsb,#bst,#bsc,#bsa{background:${BG}!important;box-shadow:0 4px 12px #0005;border-radius:6px}
+#bsb,#bst,#bsc,#bsa{background:var(--bg)!important;box-shadow:0 4px 12px #0005;border-radius:6px}
 #bsb{padding:10px;flex:1}
 #bsi{width:100%;box-sizing:border-box;font:12px monospace;padding:4px;border:1px solid rgba(255,255,255,.45);border-radius:4px;text-align:right;background:rgba(255,255,255,.75);color:#111}
-#bsc,#bsa{position:relative;width:44px;height:44px;flex:0 0 44px;color:#fff;font:18px monospace;display:flex;align-items:center;justify-content:center;user-select:none;cursor:pointer}
+#bsc,#bsa{position:relative;width:44px;height:44px;flex:0 0 44px;color:#fff;font:18px monospace;display:flex;align-items:center;justify-content:center;user-select:none;cursor:pointer;background:var(--bg)!important;outline:none!important;border:0!important;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#bsc:hover,#bsc:active,#bsc:focus,#bsa:hover,#bsa:active,#bsa:focus{background:var(--bg)!important;outline:none!important;box-shadow:0 4px 12px #0005!important}
 #bsc i{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;font-style:normal}
 #bst{margin-top:6px;width:100%;box-sizing:border-box;padding:10px;color:#fff;font:12px monospace;white-space:pre-wrap;text-align:center}
 `
       }));
 
       if (!q("#bsp")) {
-        document.body.insertAdjacentHTML("beforeend", `
-<div id="bsp">
-  <div id="bsw">
-    <div id="bsb"><input id="bsi" type="email" placeholder="Email address"></div>
-    <div id="bsc" title="Paste barcode from clipboard: OFF">📋<i>🚫</i></div>
-    <div id="bsa" title="Click to run next action">▶</div>
-  </div>
-  <div id="bst">courtesy of DotsTheWarlock</div>
-</div>`);
+        document.body.insertAdjacentHTML("beforeend", '<div id="bsp"><div id="bsw"><div id="bsb"><input id="bsi" type="email" placeholder="Email address"></div><div id="bsc" title="Paste barcode from clipboard: OFF">📋<i>🚫</i></div><div id="bsa" title="Click to run next action">▶</div></div><div id="bst">courtesy of DotsTheWarlock</div></div>');
       }
 
       let i = q("#bsi"),
