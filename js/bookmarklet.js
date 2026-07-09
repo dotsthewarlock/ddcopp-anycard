@@ -1,67 +1,59 @@
-(function () {
+(() => {
   if (!document.body || !["BonusCardRewards", "Walmart"].includes(document.body.dataset.project)) return;
 
   const K = "bs_bonus_email",
     CL = "bs_clip",
     BG = "rgba(0,0,0,.5)",
-    R = "20px",
     C = "courtesy of DotsTheWarlock",
     W = 400,
     CD = 1200,
+    q = s => document.querySelector(s),
+    qa = s => [...document.querySelectorAll(s)],
     D = m => new Promise(r => setTimeout(r, m)),
-    Q = () => document.querySelector("#target_codes > div > div > div.position-relative > div > div > div > div.serial-number_wrapper.flex-grow-1 > input"),
-    N = () => document.querySelector(".step_active div.text-center.mt-2>input"),
-    X = () => [...document.querySelectorAll('iframe[src*="recaptcha"],iframe[src*="captcha"],.g-recaptcha,[class*="captcha"]')].find(e => {
+    bar = s => (s || "").match(/\b\d{30}\b/)?.[0] || "",
+    Q = () => q("#target_codes > div > div > div.position-relative > div > div > div > div.serial-number_wrapper.flex-grow-1 > input"),
+    N = () => q(".step_active div.text-center.mt-2>input"),
+    F = (e, ...a) => a.forEach(x => e.dispatchEvent(new Event(x, { bubbles: true }))),
+    Ent = e => ["keydown", "keypress", "keyup"].forEach(x =>
+      e.dispatchEvent(new KeyboardEvent(x, {
+        key: "Enter",
+        code: "Enter",
+        keyCode: 13,
+        which: 13,
+        bubbles: true
+      }))
+    ),
+    X = () => qa('iframe[src*="recaptcha"],iframe[src*="captcha"],.g-recaptcha,[class*="captcha"]').find(e => {
       let r = e.getBoundingClientRect(),
         s = getComputedStyle(e),
-        src = e.src || "",
+        u = e.src || "",
         t = (e.title || "").toLowerCase(),
-        vis = r.width && r.height && r.bottom > 0 && r.right > 0 && r.top < innerHeight && r.left < innerWidth && s.display !== "none" && s.visibility !== "hidden" && s.opacity !== "0",
-        big = r.width > 250 && r.height > 120;
-      return vis && (big || src.includes("bframe") || t.includes("challenge"));
+        v = r.width &&
+          r.height &&
+          r.bottom > 0 &&
+          r.right > 0 &&
+          r.top < innerHeight &&
+          r.left < innerWidth &&
+          s.display !== "none" &&
+          s.visibility !== "hidden" &&
+          s.opacity !== "0";
+
+      return v && (r.width > 250 && r.height > 120 || u.includes("bframe") || t.includes("challenge"));
     }),
     U = o => {
-      let b = document.getElementById("bs_email_btn"),
-        c = document.getElementById("bs_clip_btn");
+      let b = q("#bsa");
       if (b) {
         b.textContent = o ? "⏸" : "▶";
         b.title = o ? "Stop running action" : "Click to run next action";
-        b.disabled = false;
-        b.style.opacity = o ? ".85" : "1";
       }
-      if (c) {
-        c.disabled = !!o;
-        c.style.opacity = o ? ".5" : "1";
-      }
-    },
-    P = s => {
-      let w = document.getElementById("bs_email_wrap"),
-        q = w && w.getBoundingClientRect();
-      Object.assign(s.style, {
-        top: q ? q.bottom + 6 + "px" : "90px",
-        right: R,
-        width: q ? q.width + "px" : "300px",
-        boxSizing: "border-box"
-      });
     },
     S = (m = C) => {
-      let b = document.getElementById("bs") || document.body.appendChild(Object.assign(document.createElement("div"), { id: "bs" }));
-      Object.assign(b.style, {
-        position: "fixed",
-        padding: "10px",
-        borderRadius: "6px",
-        zIndex: 9e5,
-        color: "#fff",
-        font: "12px monospace",
-        whiteSpace: "pre-wrap",
-        boxShadow: "0 4px 12px rgba(0,0,0,.3)",
-        background: BG,
-        textAlign: "center"
-      });
-      P(b);
-      b.textContent = m;
-      clearTimeout(b._t);
-      if (m !== C) b._t = setTimeout(() => S(), 4000);
+      let b = q("#bst");
+      if (b) {
+        b.textContent = m;
+        clearTimeout(b._t);
+        if (m !== C) b._t = setTimeout(() => S(), 4000);
+      }
     },
     T = () => {
       window._bsStop = 1;
@@ -72,9 +64,10 @@
       setTimeout(() => window._bsCool = 0, CD);
     },
     G = async () => {
-      if (window._bsStop || document.getElementById("bs_clip_btn")?.dataset.on !== "1" || !navigator.clipboard) return "";
+      if (window._bsStop || q("#bsc")?.dataset.on !== "1" || !navigator.clipboard) return "";
+
       try {
-        return ((await navigator.clipboard.readText()) || "").match(/\b\d{30}\b/)?.[0] || "";
+        return bar(await navigator.clipboard.readText());
       } catch (e) {
         S("Clipboard blocked");
         return "";
@@ -82,28 +75,23 @@
     },
     J = async sn => {
       let c, n;
+
       for (let k = 0; k < 20 && !window._bsStop; k++) {
         c = Q();
         n = N();
         if (c && n) break;
         await D(120);
       }
+
       if (window._bsStop || !(c && n)) return 0;
 
       c.focus();
       c.value = sn;
-      ["input", "change"].forEach(e => c.dispatchEvent(new Event(e, { bubbles: true })));
-      ["keydown", "keypress", "keyup"].forEach(e =>
-        c.dispatchEvent(new KeyboardEvent(e, {
-          key: "Enter",
-          code: "Enter",
-          keyCode: 13,
-          which: 13,
-          bubbles: true
-        }))
-      );
+      F(c, "input", "change");
+      Ent(c);
 
       await D(W);
+
       if (window._bsStop) return 0;
       if (!n.disabled) return n.click(), S('Clicked "Next"'), 1;
 
@@ -111,8 +99,7 @@
       return 1;
     },
     A = async () => {
-      if (window._bsBusy) return S("Already running");
-      if (window._bsCool) return S("Please wait");
+      if (window._bsBusy || window._bsCool) return S("Please wait");
       if (X()) return S("Try again later");
 
       window._bsBusy = 1;
@@ -120,51 +107,55 @@
       U(1);
 
       try {
-        let ei = document.getElementById("bs_email_input"),
-          em = ei && ei.value.trim(),
-          a = document.querySelector(".step_active");
+        let em = q("#bsi")?.value.trim(),
+          a = q(".step_active");
 
         if (a) {
           let g = a.querySelector('input.btn-primary[type="button"][value="Get My Bonus"]');
+
           if (g) {
             let sn = await G();
+
             if (window._bsStop) return;
+
             g.click();
             S('Clicked "Get My Bonus"');
+
             if (sn) await J(sn);
             return;
           }
 
           let n = N();
+
           if (n) {
             if (!n.disabled) return n.click(), S('Clicked "Next"');
 
-            let c = Q(),
-              sn = (c && ((c.value || "").match(/\b\d{30}\b/) || [])[0]) || await G();
+            let sn = bar(Q()?.value) || await G();
 
             if (window._bsStop) return;
             if (sn && await J(sn)) return;
+
             return S('"Next" unavailable');
           }
         }
 
-        let t = document.querySelector("#workflow_data_terms_of_service");
+        let t = q("#workflow_data_terms_of_service");
+
         if (t && !t.checked) {
           t.checked = true;
-          t.dispatchEvent(new Event("change", { bubbles: true }));
+          F(t, "change");
         }
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return S("Enter valid email");
 
-        document.querySelectorAll('input[type="email"]').forEach(i => {
+        qa('input[type="email"]').forEach(i => {
           if (i.value !== em) {
             i.value = em;
-            i.dispatchEvent(new Event("input", { bubbles: true }));
-            i.dispatchEvent(new Event("change", { bubbles: true }));
+            F(i, "input", "change");
           }
         });
 
-        let btn = [...document.querySelectorAll("button,a,input")].find(e => {
+        let btn = qa("button,a,input").find(e => {
           let r = e.getBoundingClientRect(),
             x = r.left + r.width / 2,
             y = r.top + r.height / 2;
@@ -189,6 +180,7 @@
         if (!btn) return S("No action button found");
 
         S("Submitting...");
+
         setTimeout(() => {
           if (!window._bsStop) {
             btn.click();
@@ -205,102 +197,72 @@
       }
     },
     E = () => {
-      let w = document.getElementById("bs_email_wrap");
+      q("#bs_email_wrap")?.remove();
 
-      if (!w) {
-        w = document.body.appendChild(Object.assign(document.createElement("div"), { id: "bs_email_wrap" }));
-        Object.assign(w.style, {
-          position: "fixed",
-          top: "20px",
-          right: R,
-          zIndex: 9e5,
-          display: "flex",
-          gap: "6px",
-          alignItems: "stretch"
-        });
+      let p = q("#bsp");
+      if (p && !p.querySelector("#bst")) p.remove();
 
-        let b = w.appendChild(Object.assign(document.createElement("div"), { id: "bs_email_box" }));
-        Object.assign(b.style, {
-          padding: "10px",
-          borderRadius: "6px",
-          color: "#fff",
-          font: "12px monospace",
-          background: BG,
-          boxShadow: "0 4px 12px rgba(0,0,0,.3)",
-          textAlign: "right"
-        });
+      let old = q("#bs");
+      if (old && !old.closest("#bsp")) old.remove();
 
-        let i = b.appendChild(Object.assign(document.createElement("input"), {
-          id: "bs_email_input",
-          type: "email",
-          placeholder: "Email address",
-          value: localStorage.getItem(K) || ""
-        }));
+      q("#bss")?.remove();
 
-        Object.assign(i.style, {
-          width: "230px",
-          font: "12px monospace",
-          padding: "4px",
-          border: "1px solid rgba(255,255,255,.45)",
-          borderRadius: "4px",
-          textAlign: "right",
-          background: "rgba(255,255,255,.75)",
-          color: "#111"
-        });
+      document.body.appendChild(Object.assign(document.createElement("style"), {
+        id: "bss",
+        textContent: `
+#bsp{position:fixed;top:20px;right:20px;width:360px;z-index:900000}
+#bsw{display:flex;gap:6px;align-items:stretch}
+#bsb,#bst,#bsc,#bsa{background:${BG}!important;box-shadow:0 4px 12px #0005;border-radius:6px}
+#bsb{padding:10px;flex:1}
+#bsi{width:100%;box-sizing:border-box;font:12px monospace;padding:4px;border:1px solid rgba(255,255,255,.45);border-radius:4px;text-align:right;background:rgba(255,255,255,.75);color:#111}
+#bsc,#bsa{position:relative;width:44px;height:44px;flex:0 0 44px;color:#fff;font:18px monospace;display:flex;align-items:center;justify-content:center;user-select:none;cursor:pointer}
+#bsc i{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;font-style:normal}
+#bst{margin-top:6px;width:100%;box-sizing:border-box;padding:10px;color:#fff;font:12px monospace;white-space:pre-wrap;text-align:center}
+`
+      }));
 
-        i.oninput = () => localStorage.setItem(K, i.value.trim());
-
-        let cb = w.appendChild(Object.assign(document.createElement("button"), {
-            id: "bs_clip_btn",
-            innerHTML: '📋<i style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;font-style:normal">🚫</i>',
-            title: "Paste barcode from clipboard: OFF"
-          })),
-          run = w.appendChild(Object.assign(document.createElement("button"), {
-            id: "bs_email_btn",
-            textContent: "▶",
-            title: "Click to run next action"
-          }));
-
-        [cb, run].forEach(x => Object.assign(x.style, {
-          position: "relative",
-          border: 0,
-          borderRadius: "6px",
-          color: "#fff",
-          font: "18px monospace",
-          background: BG,
-          boxShadow: "0 4px 12px rgba(0,0,0,.3)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          userSelect: "none",
-          cursor: "pointer"
-        }));
-
-        let set = o => {
-          cb.dataset.on = o ? 1 : 0;
-          localStorage.setItem(CL, o ? 1 : 0);
-          cb.lastChild.style.display = o ? "none" : "flex";
-          cb.style.background = BG;
-          cb.title = "Paste barcode from clipboard: " + (o ? "ON" : "OFF");
-        };
-
-        cb.onclick = () => {
-          if (window._bsBusy || window._bsCool) return S("Already running");
-          let on = cb.dataset.on !== "1";
-          set(on);
-          S(on ? "Paste barcode ON" : "Paste barcode OFF");
-        };
-
-        set(localStorage.getItem(CL) === "1");
-        run.onclick = () => window._bsBusy ? T() : A();
-
-        requestAnimationFrame(() => {
-          let h = b.offsetHeight;
-          cb.style.width = cb.style.height = run.style.width = run.style.height = h + "px";
-          let s = document.getElementById("bs");
-          s && P(s);
-        });
+      if (!q("#bsp")) {
+        document.body.insertAdjacentHTML("beforeend", `
+<div id="bsp">
+  <div id="bsw">
+    <div id="bsb"><input id="bsi" type="email" placeholder="Email address"></div>
+    <div id="bsc" title="Paste barcode from clipboard: OFF">📋<i>🚫</i></div>
+    <div id="bsa" title="Click to run next action">▶</div>
+  </div>
+  <div id="bst">courtesy of DotsTheWarlock</div>
+</div>`);
       }
+
+      let i = q("#bsi"),
+        cb = q("#bsc"),
+        run = q("#bsa");
+
+      if (!i._bs) {
+        i.value = localStorage.getItem(K) || "";
+        i.oninput = () => localStorage.setItem(K, i.value.trim());
+        i._bs = 1;
+      }
+
+      let set = o => {
+        cb.dataset.on = o ? 1 : 0;
+        localStorage.setItem(CL, o ? 1 : 0);
+        q("#bsc i").style.display = o ? "none" : "flex";
+        cb.title = "Paste barcode from clipboard: " + (o ? "ON" : "OFF");
+      };
+
+      cb.onclick = () => {
+        if (window._bsBusy || window._bsCool) return S("Please wait");
+
+        let on = cb.dataset.on !== "1";
+        set(on);
+        S(on ? "Paste barcode ON" : "Paste barcode OFF");
+      };
+
+      set(localStorage.getItem(CL) === "1");
+
+      run.onclick = () => window._bsBusy ? T() : A();
+
+      U(!!window._bsBusy);
     };
 
   E();
