@@ -3,13 +3,6 @@
     return;
   }
 
-  const solverButton = document.querySelector('#solver-button');
-
-  if (solverButton) {
-    solverButton.click();
-    return;
-  }
-
   const EMAIL_KEY = 'bs_bonus_email';
   const BG = 'rgba(0,0,0,0.7)';
   const RIGHT = '20px';
